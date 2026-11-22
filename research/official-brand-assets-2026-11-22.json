@@ -1,0 +1,466 @@
+{
+  "dataset": "VK LeadBot official brand assets index",
+  "checked_at": "2026-11-22",
+  "policy": "Only direct image URLs from official domains or brand CDNs. Inline data:image values are intentionally omitted. This asset index does not imply advertising/compliance approval.",
+  "assets": [
+    {
+      "code": "2594",
+      "brand": "MoneyMan",
+      "logo": "https://moneyman.ru/wp-content/themes/moneyman/assets/images/header/app-logo-banner.png",
+      "og": "https://moneyman.ru/wp-content/uploads/2017/07/oglogo.png",
+      "card": "https://moneyman.ru/wp-content/themes/moneyman/assets/images/promotions/promotions-img.webp",
+      "site": "https://moneyman.ru/"
+    },
+    {
+      "code": "2160",
+      "brand": "Webbankir",
+      "logo": "https://wbbankir.ru/wp-content/themes/webbankir/img/v3/logo.svg",
+      "og": "https://wbbankir.ru/wp-content/uploads_cloud/2021/03/logo-wb-new.png",
+      "site": "https://wbbankir.ru/"
+    },
+    {
+      "code": "1718",
+      "brand": "Займер",
+      "logo": "https://www.zaymer.ru/nuxt-public/711bc6198ca572665345a3e8f47a782d.svg",
+      "og": "https://www.zaymer.ru/nuxt-images/share.jpg",
+      "card": "https://www.zaymer.ru/nuxt-public/img/main-showcase-mascot@1x.19c38e6.png",
+      "site": "https://www.zaymer.ru/"
+    },
+    {
+      "code": "422",
+      "brand": "Е-Капуста",
+      "logo": null,
+      "card": null,
+      "site": "https://ekapusta.ru/",
+      "note": "Logo rendered inline SVG only; no direct public image asset verified."
+    },
+    {
+      "code": "968",
+      "brand": "Быстроденьги",
+      "logo": "https://minioext.bistrodengi.ru:9000/bpd-client-landing/settings/2026-02-17/logo_1771324025.webp",
+      "og": "https://minioext.bistrodengi.ru:9000/bpd-client-landing/settings/2025-04-27/bistrodengi-logo_1745771288.png",
+      "card": "https://minioext.bistrodengi.ru:9000/bpd-client-landing/banners/2026-10-19/smiling-woman-holding-phone_q80_1792376556.webp",
+      "site": "https://bistrodengi-mkk.ru/"
+    },
+    {
+      "code": "1797",
+      "brand": "Срочно Деньги",
+      "logo": "https://srochnodengi.ru/img/logo.png",
+      "og": "https://srochnodengi.ru/img/logo.png",
+      "card": "https://srochnodengi.ru/local/templates/srochnodengi/img/calc-img.webp",
+      "site": "https://srochnodengi.ru/"
+    },
+    {
+      "code": "1787",
+      "brand": "ЛигаМФО",
+      "logo": "https://ligamfo.ru/_nuxt/img/9b010c7.svg",
+      "site": "https://ligamfo.ru",
+      "note": "Aggregator/lead selection service, not a lender."
+    },
+    {
+      "code": "2100",
+      "brand": "Деньга",
+      "logo": "https://denga.ru/uploads/logo.svg",
+      "card": "https://denga.ru/uploads/denga_logo.png",
+      "site": "https://denga.ru/"
+    },
+    {
+      "code": "433",
+      "brand": "До зарплаты",
+      "logo": "https://dozarplaty.com/wp-content/themes/getcredit/img/logo_color.svg",
+      "og": "https://dozarplaty.com/wp-content/uploads/2026/03/favicon-logo.png",
+      "site": "https://dozarplaty.com/",
+      "note": "Campaign/site requires review whether it acts as an aggregator."
+    },
+    {
+      "code": "983",
+      "brand": "Финмолл",
+      "logo": "https://finmoll.ru/css/images/logo.png",
+      "card": "https://finmoll.ru/css/images/slider/finmoll-carousel.png",
+      "site": "https://finmoll.ru/",
+      "note": "Aggregator; not to be called an MFO."
+    },
+    {
+      "code": "483",
+      "brand": "Простой вопрос",
+      "logo": "https://prostoyvopros.ru/_nuxt/pvLogo.C3wP5lDZ.svg",
+      "og": "https://prostoyvopros.ru/images/social/prostoyvopros-og-1200x630.png",
+      "site": "https://prostoyvopros.ru/",
+      "note": "Broker/aggregator; not a lender."
+    },
+    {
+      "code": "430",
+      "brand": "Oneclickmoney",
+      "logo": "https://oneclickmoney.ru/new/images/css/svg/logo-sclled.svg",
+      "site": "https://oneclickmoney.ru/"
+    },
+    {
+      "code": "1713",
+      "brand": "Доброзайм",
+      "logo": "https://dobrozaim.ru/img/dbrz_logo93.png",
+      "card": "https://dobrozaim.ru/images/logo_text_bottom.png",
+      "site": "https://dobrozaim.ru/"
+    },
+    {
+      "code": "2590",
+      "brand": "GreenMoney",
+      "logo": "https://greenmoney.ru/public/tenants/sf/logos/logo.svg",
+      "card": "https://greenmoney.ru/public/tenants/sf/images/social/logo_social-1200x630.png",
+      "site": "https://greenmoney.ru/"
+    },
+    {
+      "code": "1626",
+      "brand": "МигКредит",
+      "logo": "https://migcredit.ru/dist/img/logos/logo.svg",
+      "site": "https://migcredit.ru/"
+    },
+    {
+      "code": "449",
+      "brand": "БелкаКредит",
+      "logo": "https://8ecac1aa-0b6e-4d68-84bc-9b6f51acc6d4.selstorage.ru/belkacredit/uploads/2024/01/logo_2024.svg",
+      "card": "https://8ecac1aa-0b6e-4d68-84bc-9b6f51acc6d4.selstorage.ru/belkacredit/uploads/2022/12/take-img-3x_min.webp",
+      "site": "https://belkacredit.ru/"
+    },
+    {
+      "code": "1634",
+      "brand": "Турбозайм",
+      "logo": "https://turbozaim.ru/assets/settings/2026-01-15/logo_white_1768461251.svg",
+      "og": "https://turbozaim.ru/assets/settings/2025-03-13/og-image_1741866644.png",
+      "site": "https://turbozaim.ru/"
+    },
+    {
+      "code": "950",
+      "brand": "Альфа Деньги",
+      "card": "https://adengi.ru/images/share.png",
+      "site": "https://alfadengi.ru/",
+      "note": "Logo only inline SVG; use public share image as card background, not logo."
+    },
+    {
+      "code": "2163",
+      "brand": "Альфа-Деньги",
+      "card": "https://adengi.ru/images/share.png",
+      "site": "https://alfadengi.ru/",
+      "note": "Separate campaign code; same brand asset as code 950."
+    },
+    {
+      "code": "1637",
+      "brand": "Credit7",
+      "logo": "https://credit7.ru/wp-content/uploads/2026/02/logo-116x44-1.svg",
+      "card": "https://credit7.ru/wp-content/uploads/2026/05/c7-banner-2x.webp",
+      "site": "https://credit7.ru/"
+    },
+    {
+      "code": "1879",
+      "brand": "МфоБанк",
+      "logo": "https://mfobank.ru/images/logo_white.svg?v=1650905311",
+      "card": "https://mfobank.ru/images/girl_02.webp?v=1650905311",
+      "site": "https://mfobank.ru/"
+    },
+    {
+      "code": "1758",
+      "brand": "Папазайм",
+      "logo": "https://papa-zaim.ru/_next/static/svg/logo_horizontal.svg",
+      "site": "https://papa-zaim.ru/"
+    },
+    {
+      "code": "1702",
+      "brand": "Займикс",
+      "logo": "https://zaymix.ru/logo.svg",
+      "og": "https://zaymix.ru/og-default.png",
+      "site": "https://zaymix.ru/"
+    },
+    {
+      "code": "2589",
+      "brand": "Давака",
+      "card": "https://davaka.ru/img/968to504.png",
+      "site": "https://davaka.ru/",
+      "note": "Logo only inline SVG; direct OG/card image is available."
+    },
+    {
+      "code": "2584",
+      "brand": "Возьмика",
+      "logo": "https://vozmika.ru/public/tenants/mf/logos/logo.svg",
+      "card": "https://vozmika.ru/public/tenants/mf/images/loan-offers/loan-2.png",
+      "site": "https://vozmika.ru/"
+    },
+    {
+      "code": "1677",
+      "brand": "Выдадим",
+      "logo": "https://vidadim.ru/src/images/logo.svg",
+      "site": "https://vidadim.ru/"
+    },
+    {
+      "code": "1866",
+      "brand": "ЦДП",
+      "logo": "https://cdpgroup.ru/local/templates/cdp/img/logo_cdp.svg",
+      "site": "https://cdpgroup.ru/",
+      "note": "Generic offer not uniquely matched to a specific lending entity."
+    },
+    {
+      "code": "2196",
+      "brand": "ЭкоЗайм 24",
+      "logo": "https://ecozaym24.ru/theme/site/img/logo.png",
+      "card": "https://ecozaym24.ru/theme/site/new/logo.png",
+      "site": "https://ecozaym24.ru/"
+    },
+    {
+      "code": "1749",
+      "brand": "Центр займов",
+      "logo": "https://centrzaimov.ru/images/logo.svg",
+      "site": "https://centrzaimov.ru/"
+    },
+    {
+      "code": "1565",
+      "brand": "Ecozaym",
+      "logo": "https://ecozaym24.ru/theme/site/img/logo.png",
+      "card": "https://ecozaym24.ru/theme/site/new/logo.png",
+      "site": "https://ecozaym24.ru/",
+      "note": "Separate CPA code; shared brand asset, verify campaign-specific placement."
+    },
+    {
+      "code": "1676",
+      "brand": "AsiaCredit",
+      "logo": "https://asiacredit.ru/img/main/LOGO.svg",
+      "card": "https://asiacredit.ru/img/get/480-phone1.png.webp",
+      "site": "https://asiacredit.ru/"
+    },
+    {
+      "code": "2165",
+      "brand": "Байбол",
+      "logo": "https://baibol.ru/bitrix/templates/baibol2022/img/logo.svg",
+      "card": "https://baibol.ru/local/img/baibol-homepage/app-visual-ru-mobile.svg",
+      "site": "https://baibol.ru/"
+    },
+    {
+      "code": "497",
+      "brand": "Вишня",
+      "logo": "https://vishnya-zaim.ru/static/img/logo/logo.f647b0399178.svg",
+      "card": "https://vishnya-zaim.ru/static/img/svg/how_loan_1.de1c895631aa.svg",
+      "site": "https://vishnya-zaim.ru/",
+      "note": "Aggregator classification; must not present as lender."
+    },
+    {
+      "code": "453",
+      "brand": "Telezaim",
+      "logo": "https://telezaim.ru/static/img/logo/logo.06afee9d837b.svg",
+      "site": "https://telezaim.ru/",
+      "note": "Broker/aggregator."
+    },
+    {
+      "code": "2786",
+      "brand": "Банки.ру — умная витрина займов",
+      "card": "https://www.banki.ru/static/ng/bundles/ui-2018/MainBundle/images-nohash/og-image.png",
+      "site": "https://www.banki.ru/",
+      "note": "Financial marketplace/showcase, not an MFO."
+    },
+    {
+      "code": "1628",
+      "brand": "Свои люди",
+      "logo": "https://svoi-ludi.ru/assets/dda449b3/img/logo.svg",
+      "site": "https://svoi-ludi.ru/"
+    },
+    {
+      "code": "1003",
+      "brand": "Мега Деньги",
+      "logo": "https://megadengi.su/dist/img/logo.svg",
+      "site": "https://megadengi.su/"
+    },
+    {
+      "code": "1798",
+      "brand": "Хурма Кредит",
+      "logo": "https://hurmacredit.ru/img/hurm_min.png",
+      "site": "https://hurmacredit.ru/"
+    },
+    {
+      "code": "1648",
+      "brand": "БериБеру",
+      "card": "https://beriberu.ru/assets/banner-phone.png",
+      "site": "https://beriberu.ru/",
+      "note": "No public direct logo URL verified."
+    },
+    {
+      "code": "495",
+      "brand": "Медиумскор",
+      "logo": "https://mscore.ru/images/main_logo.svg",
+      "card": "https://mscore.ru/images/main_about.webp",
+      "site": "https://mscore.ru/"
+    },
+    {
+      "code": "486",
+      "brand": "МикроКлад",
+      "logo": "https://microklad.ru/images/new_logo.png",
+      "site": "https://microklad.ru/"
+    },
+    {
+      "code": "2098",
+      "brand": "Полизайм",
+      "logo": "https://polyzaim.ru/images/main_logo.svg",
+      "card": "https://polyzaim.ru/files/croped/raw/602dd3356cf1874f4766ed381cd8025b_how_take-3.jpeg",
+      "site": "https://polyzaim.ru/"
+    },
+    {
+      "code": "1627",
+      "brand": "Целевые Финансы",
+      "site": "https://celfin.ru/",
+      "note": "No direct logo asset extracted."
+    },
+    {
+      "code": "1368",
+      "brand": "Молодые деньги",
+      "site": "https://mdengy.ru/",
+      "note": "Logo available only as inline SVG; no direct asset."
+    },
+    {
+      "code": "2097",
+      "brand": "Credelix",
+      "site": "https://credelix.ru/",
+      "note": "Logo available only as inline SVG; no direct asset."
+    },
+    {
+      "code": "1796",
+      "brand": "Skela Money",
+      "logo": "https://skela.money/images/logo/logo.png",
+      "site": "https://skela.money/"
+    },
+    {
+      "code": "1646",
+      "brand": "Pay P.S.",
+      "logo": "https://www.payps.ru/content/images/logos.svg",
+      "og": "https://www.payps.ru/content/images/og.png",
+      "site": "https://www.payps.ru/"
+    },
+    {
+      "code": "1630",
+      "brand": "Ezaem",
+      "logo": "https://www.ezaem.ru/assets/svg/logo.svg",
+      "site": "https://www.ezaem.ru/"
+    },
+    {
+      "code": "1647",
+      "brand": "Fastmoney",
+      "logo": "https://fastmoney.ru/assets/images/static/logo.svg",
+      "card": "https://fastmoney.ru/assets/images/content/hero_bg-s.jpg",
+      "site": "https://fastmoney.ru/"
+    },
+    {
+      "code": "1643",
+      "brand": "Финтерра",
+      "logo": "https://xn--80ajiuqaln.xn--p1ai/images/logo/finterra_logo.svg?2021",
+      "card": "https://xn--80ajiuqaln.xn--p1ai/images/banners/calculators/main-image.png?22.09",
+      "site": "https://xn--80ajiuqaln.xn--p1ai/"
+    },
+    {
+      "code": "2450",
+      "brand": "БамМани",
+      "logo": "https://www.bamm.ru/static/web-bamm/build/565e7c8f95f78015cf81.svg?url",
+      "card": "https://www.bamm.ru/static/web-bamm/build/736a9c7984e05a1d8925.webp",
+      "site": "https://www.bamm.ru/"
+    },
+    {
+      "code": "2175",
+      "brand": "Надо Денег",
+      "logo": "https://8ecac1aa-0b6e-4d68-84bc-9b6f51acc6d4.selstorage.ru/nadodeneg/uploads/2026/02/logo_x3.webp",
+      "card": "https://8ecac1aa-0b6e-4d68-84bc-9b6f51acc6d4.selstorage.ru/nadodeneg/uploads/2022/01/girl.webp",
+      "site": "https://nadodeneg.ru/"
+    },
+    {
+      "code": "1748",
+      "brand": "МИР Денег",
+      "logo": "https://mircash24.ru/assets/images/static/logo.svg",
+      "card": "https://mircash24.ru/assets/images/content/main/ban.jpg",
+      "site": "https://mircash24.ru/"
+    },
+    {
+      "code": "450",
+      "brand": "Деньги сразу",
+      "logo": "https://dengisrazy.ru/assets/images/site/index/logo-white.svg",
+      "card": "https://dengisrazy.ru/site/dist/image/mobile_banner/1000r.png",
+      "site": "https://dengisrazy.ru/"
+    },
+    {
+      "code": "1625",
+      "brand": "Кредиска",
+      "og": "https://krediska.ru/img/968to504.png",
+      "site": "https://krediska.ru/",
+      "note": "Logo appears inline SVG; OG image is direct official image."
+    },
+    {
+      "code": "1799",
+      "brand": "Joy money",
+      "og": "https://joy.money/assets/images/imgOpenGraph.png",
+      "card": "https://joy.money/cms-media/image.png",
+      "site": "https://joy.money/",
+      "note": "Logo only inline SVG; no direct logo URL verified."
+    },
+    {
+      "code": "1621",
+      "brand": "ЛайкМани",
+      "logo": "https://likemoney.ru/bitrix/templates/main/img/logo.svg",
+      "card": "https://likemoney.ru/bitrix/templates/main/img/hero.png",
+      "site": "https://likemoney.ru/",
+      "note": "Broker/aggregator, not a lender."
+    },
+    {
+      "code": "426",
+      "brand": "Займиго",
+      "card": "https://zaymigo.ru/_nuxt/hero-mascot.DAxUrba6.png",
+      "site": "https://zaymigo.ru/",
+      "note": "Logo extraction returned inline SVG only."
+    },
+    {
+      "code": "2739",
+      "brand": "Финансовый Навигатор фикса",
+      "logo": "https://navifin.ru/img/main-block/bg-kpk-logo.svg",
+      "site": "https://navifin.ru/",
+      "note": "KPK consumer credit cooperative; not MFO."
+    },
+    {
+      "code": "1757",
+      "brand": "Viva Деньги",
+      "logo": "https://zaym.vivadengi.ru/img/svg/logo.svg",
+      "card": "https://zaym.vivadengi.ru/img/content/intro-desktop@2x.jpg",
+      "site": "https://zaym.vivadengi.ru/"
+    },
+    {
+      "code": "1717",
+      "brand": "Котозайм",
+      "logo": "https://kotozaim.ru/images/logo.svg",
+      "card": "https://kotozaim.ru/images/sect_top_img_m.png",
+      "site": "https://kotozaim.ru/"
+    },
+    {
+      "code": "1747",
+      "brand": "Мигом Займ",
+      "logo": "https://migom-zaim.ru/assets/images/static/logo.svg",
+      "card": "https://migom-zaim.ru/assets/images/content/hero_bg-b.jpg",
+      "site": "https://migom-zaim.ru/"
+    },
+    {
+      "code": "1744",
+      "brand": "ЗаймиРУБ",
+      "logo": "https://zaimirub.ru/assets/images/static/logo.svg",
+      "card": "https://zaimirub.ru/assets/images/content/hero_bg-s.jpeg",
+      "site": "https://zaimirub.ru/"
+    },
+    {
+      "code": "468",
+      "brand": "Кэшмагнит",
+      "logo": "https://cashmagnit.ru/src/images/logo.svg",
+      "site": "https://cashmagnit.ru/"
+    },
+    {
+      "code": "1738",
+      "brand": "Дополучкино",
+      "og": "https://dopoluchkino.ru/share.png",
+      "site": "https://dopoluchkino.ru/",
+      "note": "Logo only inline SVG; OG card image available."
+    },
+    {
+      "code": "1640",
+      "brand": "Credit 365",
+      "logo": "https://8ecac1aa-0b6e-4d68-84bc-9b6f51acc6d4.selstorage.ru/credit365/uploads/2023/10/logo.svg",
+      "og": "https://8ecac1aa-0b6e-4d68-84bc-9b6f51acc6d4.selstorage.ru/credit365/uploads/2024/05/c365_mail_logo_2x.webp",
+      "site": "https://credit365.ru/"
+    }
+  ]
+}
