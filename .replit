@@ -1,0 +1,3 @@
+run = "node bootstrap.mjs"
+entrypoint = "bootstrap.mjs"
+hidden = [".config", ".git", "node_modules", ".data", ".bundle"]
