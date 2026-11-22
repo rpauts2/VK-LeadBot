@@ -19,6 +19,7 @@ for (const [relative, content] of Object.entries(bundle)) {
 }
 fs.mkdirSync(path.join(root, '.data'), { recursive: true });
 console.log(`VK LeadBot source restored: ${Object.keys(bundle).length} files.`);
+if (process.env.RESTORE_ONLY === '1') process.exit(0);
 const child = spawn(process.execPath, [path.join(root, 'server.mjs')], {
   cwd: root,
   stdio: 'inherit',
