@@ -20,7 +20,7 @@ async function init(){
   const d=await r.json();offers=d.offers||[];
   const types=[...new Set(offers.map(x=>x.organizationType).filter(x=>x&&x!=='не подтверждён'))].sort((a,b)=>a.localeCompare(b,'ru'));
   $('#type').insertAdjacentHTML('beforeend',types.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join(''));
-  $('#count').textContent='Всего подготовлено '+d.total+' карточек; доступно переходов: '+(d.enabled||0)+'; исключено из витрины: '+d.excluded+'.';
+  $('#count').textContent='Всего подготовлено '+d.total+' карточек; доступно переходов: '+(d.enabled||0)+'; исключено из витрины: '+d.excluded+'.';const badge=$('.draft-badge');if(badge)badge.textContent=(d.enabled||0)>0?'Активные предложения: '+d.enabled:'Черновик · переходы не включены';
   $('#search').addEventListener('input',render);$('#type').addEventListener('change',render);
   render();
  }catch(e){$('#count').textContent='Не удалось загрузить каталог.';$('#cards').innerHTML='<div class="empty">Ошибка загрузки. Обновите страницу позже.</div>';}
