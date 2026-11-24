@@ -4,7 +4,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
-import { canSendToLead, parseConsentFlag, validPhone, assertLiveSendDisabled } from './lib/core-v2.mjs';
+import { canSendToLead, parseConsentFlag, validPhone, validEvidenceDate, assertLiveSendDisabled } from './lib/core-v2.mjs';
 
 const ROOT=path.dirname(fileURLToPath(import.meta.url)), DATA=path.resolve(ROOT,'.data');
 fs.mkdirSync(DATA,{recursive:true});
@@ -57,7 +57,7 @@ function importLead(v){
  const at=now(),source=str(v.source,500)||'manual-import';
  const proof=p=>({flag:parseConsentFlag(v[p]),at:str(v[p+'_at'],100),source:str(v[p+'_source'],1000)});
  const pd=proof('personal_data_consent'),ad=proof('advertising_consent'),perm=proof('vk_messages_allowed');
- const confirmed=p=>p.flag===true&&p.at&&p.source;
+ const confirmed=p=>p.flag===true&&validEvidenceDate(p.at)&&p.source;
  const val=(p,k)=>p.flag===null?(old?old[k]:0):(confirmed(p)?1:0);
  const field=(p,kAt,kSource)=>p.flag===null?{at:old?.[kAt]||null,source:old?.[kSource]||null}:confirmed(p)?{at:p.at,source:p.source}:{at:null,source:null};
  const pde=field(pd,'personal_data_consent_at','personal_data_consent_source'),ade=field(ad,'advertising_consent_at','advertising_consent_source'),pe=field(perm,'vk_permission_at','vk_permission_source');
@@ -87,7 +87,7 @@ async function route(req,res){
  if(req.method==='GET'&&p==='/api/leads')return send(res,200,{leads:many('SELECT * FROM leads ORDER BY id DESC LIMIT 1000').map(leadView)});
  if(req.method==='POST'&&p==='/api/leads/import'){const d=await readBody(req);if(!Array.isArray(d.rows)||d.rows.length>5000)return send(res,400,{error:'Ожидается rows до 5000 строк'});const result={imported:0,updated:0,skipped:0,reasons:{}};db.exec('SAVEPOINT audience_import');try{for(const row of d.rows){const x=importLead(row||{});if(x.skip){result.skipped++;result.reasons[x.skip]=(result.reasons[x.skip]||0)+1;}else if(x.updated)result.updated++;else result.imported++;}db.exec('RELEASE audience_import');}catch(e){db.exec('ROLLBACK TO audience_import; RELEASE audience_import');throw e;}return send(res,200,result);}
  const lm=p.match(/^\/api\/leads\/(\d+)\/(unsubscribe|suppress|unsuppress)$/);
- if(req.method==='POST'&&lm){const id=Number(lm[1]),action=lm[2],l=get('SELECT * FROM leads WHERE id=?',id);if(!l)return send(res,404,{error:'Лид не найден'});if(action==='unsubscribe'){run('UPDATE leads SET unsubscribed=1,advertising_consent=0,advertising_consent_at=NULL,advertising_consent_source=NULL,updated_at=? WHERE id=?',now(),id);event(id,'advertising',false,now(),'user-unsubscribe');run('INSERT INTO suppression_list(vk_user_id,phone,reason,added_at) VALUES(?,?,?,?)',l.vk_user_id,l.phone,'unsubscribe',now());}if(action==='suppress'){run('UPDATE leads SET suppressed=1,updated_at=? WHERE id=?',now(),id);run('INSERT INTO suppression_list(vk_user_id,phone,reason,added_at) VALUES(?,?,?,?)',l.vk_user_id,l.phone,'manual-suppression',now());}if(action==='unsuppress'){run('UPDATE leads SET suppressed=0,updated_at=? WHERE id=?',now(),id);run('DELETE FROM suppression_list WHERE (vk_user_id=? AND ? IS NOT NULL) OR (phone=? AND ? IS NOT NULL)',l.vk_user_id,l.vk_user_id,l.phone,l.phone);}return send(res,200,{ok:true});}
+ if(req.method==='POST'&&lm){const id=Number(lm[1]),action=lm[2],l=get('SELECT * FROM leads WHERE id=?',id);if(!l)return send(res,404,{error:'Лид не найден'});if(action==='unsubscribe'){run('UPDATE leads SET unsubscribed=1,advertising_consent=0,advertising_consent_at=NULL,advertising_consent_source=NULL,updated_at=? WHERE id=?',now(),id);event(id,'advertising',false,now(),'user-unsubscribe');run('INSERT OR IGNORE INTO suppression_list(vk_user_id,phone,reason,added_at) VALUES(?,?,?,?)',l.vk_user_id,l.phone,'unsubscribe',now());}if(action==='suppress'){run('UPDATE leads SET suppressed=1,updated_at=? WHERE id=?',now(),id);run('INSERT INTO suppression_list(vk_user_id,phone,reason,added_at) VALUES(?,?,?,?)',l.vk_user_id,l.phone,'manual-suppression',now());}if(action==='unsuppress'){run('UPDATE leads SET suppressed=0,updated_at=? WHERE id=?',now(),id);run('DELETE FROM suppression_list WHERE (vk_user_id=? AND ? IS NOT NULL) OR (phone=? AND ? IS NOT NULL)',l.vk_user_id,l.vk_user_id,l.phone,l.phone);}return send(res,200,{ok:true});}
  if(req.method==='GET'&&p==='/api/campaigns')return send(res,200,{campaigns:many('SELECT * FROM campaigns ORDER BY id DESC')});
  if(req.method==='POST'&&p==='/api/campaigns'){const d=await readBody(req),name=str(d.name,150),message=str(d.message,5000);if(!name||!message)return send(res,400,{error:'Название и текст обязательны'});const r=run('INSERT INTO campaigns(name,message,status,created_at) VALUES(?,?,?,?)',name,message,'draft',now());return send(res,201,{ok:true,id:Number(r.lastInsertRowid)});}
  const cm=p.match(/^\/api\/campaigns\/(\d+)\/(preview|dry-run|send)$/);
