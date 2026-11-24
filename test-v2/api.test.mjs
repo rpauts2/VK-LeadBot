@@ -36,16 +36,23 @@ test('no argument can unlock live VK message delivery',()=>{
 test('HTTP API imports audience, simulates campaigns and refuses actual sending',async t=>{
  const dir=await mkdtemp(path.join(os.tmpdir(),'vkleadbot-'));
  const probe=net.createServer();probe.listen(0);await once(probe,'listening');const port=probe.address().port;await new Promise(r=>probe.close(r));
- const child=spawn(process.execPath,['server-v2.mjs'],{cwd:path.resolve('.'),env:{...process.env,PORT:String(port),DATABASE_PATH:path.join(dir,'test.sqlite'),ADMIN_PASSWORD:'test-password-only'},stdio:['ignore','pipe','pipe']});
+ const child=spawn(process.execPath,['server-v2.mjs'],{cwd:path.resolve('.'),env:{...process.env,PORT:String(port),DATABASE_PATH:path.join(dir,'test.sqlite'),ADMIN_PASSWORD:'test-password-only',VK_COMMUNITY_ID:'243658195',VK_CALLBACK_CONFIRMATION:'ci-confirmation-token',VK_CALLBACK_SECRET:'ci-callback-secret'},stdio:['ignore','pipe','pipe']});
  let output='';child.stdout.on('data',d=>output+=d.toString());child.stderr.on('data',d=>output+=d.toString());
  t.after(async()=>{if(child.exitCode===null)child.kill('SIGTERM');if(child.exitCode===null)await once(child,'exit').catch(()=>{});await rm(dir,{recursive:true,force:true});});
  let health;for(let i=0;i<60;i++){try{const r=await fetch('http://127.0.0.1:'+port+'/api/health');if(r.ok){health=await r.json();break;}}catch{}if(child.exitCode!==null)break;await new Promise(r=>setTimeout(r,250));}
  assert.ok(health?.ok,'Server did not start. Output: '+output);
  assert.equal(health.totalOffers,123);assert.equal(health.offersDraft,123);assert.equal(health.liveMessagingEnabled,false);
+ let cb=await fetch('http://127.0.0.1:'+port+'/api/vk/callback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type:'confirmation',group_id:243658195,secret:'wrong'})});assert.equal(cb.status,403);
+ cb=await fetch('http://127.0.0.1:'+port+'/api/vk/callback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({type:'confirmation',group_id:243658195,secret:'ci-callback-secret'})});assert.equal(cb.status,200);assert.equal(await cb.text(),'ci-confirmation-token');
+ const incoming={type:'message_new',group_id:243658195,event_id:'event-test-001',secret:'ci-callback-secret',object:{message:{id:77,from_id:710055,peer_id:710055,text:'test'}}};
+ cb=await fetch('http://127.0.0.1:'+port+'/api/vk/callback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(incoming)});assert.equal(cb.status,200);assert.equal(await cb.text(),'ok');
+ cb=await fetch('http://127.0.0.1:'+port+'/api/vk/callback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(incoming)});assert.equal(cb.status,200);
  const home=await fetch('http://127.0.0.1:'+port+'/');assert.equal(home.status,200);assert.match(await home.text(),/VK LeadBot/);
  const guest=await fetch('http://127.0.0.1:'+port+'/api/leads');assert.equal(guest.status,401);
  const login=await fetch('http://127.0.0.1:'+port+'/api/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({password:'test-password-only'})});assert.equal(login.status,200);
  const cookie=login.headers.get('set-cookie').split(';')[0];const headers={'content-type':'application/json',cookie};
+ r=await fetch('http://127.0.0.1:'+port+'/api/vk/events');assert.equal(r.status,401);
+ r=await fetch('http://127.0.0.1:'+port+'/api/vk/events',{headers});assert.equal(r.status,200);const vkEvents=await r.json();assert.equal(vkEvents.total,1);assert.equal(vkEvents.events[0].event_type,'message_new');assert.equal(vkEvents.events[0].vk_user_id,'710055');
  let r=await fetch('http://127.0.0.1:'+port+'/api/offers',{headers});assert.equal(r.status,200);const catalog=await r.json();assert.equal(catalog.offers.length,123);assert.ok(catalog.offers.every(o=>o.status==='draft'&&o.bot_enabled===false));
  const offerCode=catalog.offers[0].source_offer_code;r=await fetch('http://127.0.0.1:'+port+'/api/offers/'+offerCode,{method:'PATCH',headers,body:JSON.stringify({status:'active',bot_enabled:true})});assert.equal(r.status,200);assert.equal((await r.json()).offer.status,'draft');
  const good={vk_user_id:'710001',phone:'+79990000001',source:'test',personal_data_consent:'true',personal_data_consent_at:'2026-11-24T10:00:00Z',personal_data_consent_source:'test-form-pd',advertising_consent:'true',advertising_consent_at:'2026-11-24T10:01:00Z',advertising_consent_source:'test-form-ad',vk_messages_allowed:'true',vk_messages_allowed_at:'2026-11-24T10:02:00Z',vk_messages_allowed_source:'vk-start'};
