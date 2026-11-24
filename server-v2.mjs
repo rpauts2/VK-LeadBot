@@ -21,7 +21,8 @@ db.exec([
 'CREATE TABLE IF NOT EXISTS sources(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,url TEXT,source_type TEXT NOT NULL DEFAULT \'manual\',notes TEXT,created_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS bot_settings(key TEXT PRIMARY KEY,value_json TEXT NOT NULL,updated_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS suppression_list(id INTEGER PRIMARY KEY AUTOINCREMENT,vk_user_id TEXT,phone TEXT,reason TEXT NOT NULL,added_at TEXT NOT NULL)',
-'CREATE TABLE IF NOT EXISTS vk_inbound_events(event_id TEXT PRIMARY KEY,event_type TEXT NOT NULL,vk_user_id TEXT,message_id TEXT,peer_id TEXT,received_at TEXT NOT NULL)'
+'CREATE TABLE IF NOT EXISTS vk_inbound_events(event_id TEXT PRIMARY KEY,event_type TEXT NOT NULL,vk_user_id TEXT,message_id TEXT,peer_id TEXT,received_at TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS cpa_showcase_links(source_offer_code TEXT PRIMARY KEY,label TEXT NOT NULL,cpa_url TEXT NOT NULL,erid TEXT,erid_status TEXT NOT NULL,publication_enabled INTEGER NOT NULL DEFAULT 0,block_reason TEXT,received_at TEXT NOT NULL)'
 ].join(';\n') + ';');
 db.exec('CREATE INDEX IF NOT EXISTS idx_lead_eligibility ON leads(advertising_consent,vk_messages_allowed,unsubscribed,suppressed); CREATE INDEX IF NOT EXISTS idx_campaign_recipient ON campaign_recipients(campaign_id);');
 const now=()=>new Date().toISOString(), sessions=new Map(), attempts=new Map();
@@ -45,6 +46,24 @@ function importCatalog(){
  return (data.records||[]).length;
 }
 bootImport=importCatalog();
+function importShowcaseLinks(){
+ const file=path.join(ROOT,'research/cpa-offer-links-2026-11-24.json');
+ if(!fs.existsSync(file))return 0;
+ const data=JSON.parse(fs.readFileSync(file,'utf8'));
+ const up=db.prepare('INSERT INTO cpa_showcase_links(source_offer_code,label,cpa_url,erid,erid_status,publication_enabled,block_reason,received_at) VALUES(?,?,?,?,?,0,?,?) ON CONFLICT(source_offer_code) DO UPDATE SET label=excluded.label,cpa_url=excluded.cpa_url,erid=excluded.erid,erid_status=excluded.erid_status,publication_enabled=0,block_reason=excluded.block_reason,received_at=excluded.received_at');
+ let count=0;
+ for(const r of data.records||[]){
+  const code=str(r.source_offer_code,20),label=str(r.label,200),url=str(r.url,2000);
+  if(!/^\d+$/.test(code)||!label)continue;
+  let parsed;try{parsed=new URL(url);}catch{continue;}
+  if(parsed.protocol!=='https:'||parsed.hostname!=='bit-do.ru'||!parsed.pathname.startsWith('/'+code+'-'))continue;
+  up.run(code,label,url,r.erid?str(r.erid,200):null,str(r.erid_status,100)||'not-verified',r.block_reason?str(r.block_reason,500):null,str(r.received_at,40)||now());
+  count++;
+ }
+ return count;
+}
+const showcaseImport=importShowcaseLinks();
+
 function settings(){const r=get('SELECT value_json FROM bot_settings WHERE key=?','main');return r?JSON.parse(r.value_json):DEFAULT;}
 function saveSettings(v){run('INSERT INTO bot_settings(key,value_json,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value_json=excluded.value_json,updated_at=excluded.updated_at','main',JSON.stringify(v),now());}
 function leadView(l){return {id:l.id,vk_user_id:l.vk_user_id,phone:l.phone,source:l.source,personal_data_consent:!!l.personal_data_consent,personal_data_consent_at:l.personal_data_consent_at,personal_data_consent_source:l.personal_data_consent_source,advertising_consent:!!l.advertising_consent,advertising_consent_at:l.advertising_consent_at,advertising_consent_source:l.advertising_consent_source,vk_messages_allowed:!!l.vk_messages_allowed,vk_permission_at:l.vk_permission_at,vk_permission_source:l.vk_permission_source,unsubscribed:!!l.unsubscribed,suppressed:!!l.suppressed,eligible:canSendToLead(l).ok};}
@@ -70,7 +89,7 @@ function importLead(v){
 }
 async function route(req,res){
  const u=new URL(req.url,'http://'+(req.headers.host||'localhost')),p=u.pathname;
- if(req.method==='GET'&&p==='/api/health')return send(res,200,{ok:true,totalOffers:Number(get('SELECT COUNT(*) n FROM offers').n),offersDraft:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\' AND bot_enabled=0').n),bootImport,liveMessagingEnabled:false,vkCommunityId:String(process.env.VK_COMMUNITY_ID||'243658195'),vkCallbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET)});
+ if(req.method==='GET'&&p==='/api/health')return send(res,200,{ok:true,totalOffers:Number(get('SELECT COUNT(*) n FROM offers').n),offersDraft:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\' AND bot_enabled=0').n),bootImport,liveMessagingEnabled:false,vkCommunityId:String(process.env.VK_COMMUNITY_ID||'243658195'),vkCallbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET),showcaseTotal:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links').n),showcaseImport});
  if(req.method==='POST'&&p==='/api/login'){
   const ip=req.socket.remoteAddress||'unknown',a=attempts.get(ip)||{n:0,until:0};if(a.until>Date.now())return send(res,429,{error:'Слишком много попыток'});
   const d=await readBody(req,20000),password=process.env.ADMIN_PASSWORD||'';
@@ -105,8 +124,13 @@ async function route(req,res){
   }
   res.writeHead(200,{'content-type':'text/plain; charset=utf-8','cache-control':'no-store'});res.end('ok');return;
  }
+ if(req.method==='GET'&&p==='/api/public/showcase'){
+  const rows=many(`SELECT c.source_offer_code,c.label,c.erid,c.erid_status,o.organization_type FROM cpa_showcase_links c LEFT JOIN offers o ON o.source_offer_code=c.source_offer_code WHERE c.block_reason IS NULL ORDER BY c.label COLLATE NOCASE`);
+  return send(res,200,{offers:rows.map(x=>({code:x.source_offer_code,label:x.label,organizationType:x.organization_type||'не подтверждён',eridStatus:x.erid_status,hasErid:Boolean(x.erid&&x.erid!=='static'),clickEnabled:false,reviewStatus:'draft'})),total:rows.length,excluded:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NOT NULL').n),publicationEnabled:false,warning:'Черновик. Условия, юридические лица рекламодателей и маркировка должны быть проверены до публикации.'});
+ }
  if(p.startsWith('/api/')&&!auth(req,res))return;
  if(p.startsWith('/api/')&&req.method!=='GET'&&!originOk(req))return send(res,403,{error:'Недопустимый источник запроса'});
+ if(req.method==='GET'&&p==='/api/showcase/summary')return send(res,200,{total:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links').n),readyForReview:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NULL').n),excluded:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NOT NULL').n),withErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid IS NOT NULL AND erid<>'' AND erid<>'static'").n),withoutErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid IS NULL OR erid=''").n),staticErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid='static'").n),publicationEnabled:false});
  if(req.method==='GET'&&p==='/api/dashboard'){const e=eligibility();return send(res,200,{counts:{offers:Number(get('SELECT COUNT(*) n FROM offers').n),draftOffers:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\'').n),leads:Number(get('SELECT COUNT(*) n FROM leads').n),eligible:e.filter(x=>x.ok).length,campaigns:Number(get('SELECT COUNT(*) n FROM campaigns').n),sources:Number(get('SELECT COUNT(*) n FROM sources').n)},liveMessagingEnabled:false,recentCampaigns:many('SELECT * FROM campaigns ORDER BY id DESC LIMIT 5')});}
  if(req.method==='GET'&&p==='/api/offers'){const q=str(u.searchParams.get('q'),200).toLowerCase();const rows=many('SELECT * FROM offers ORDER BY supplied_label COLLATE NOCASE').filter(x=>!q||[x.supplied_label,x.official_brand,x.source_offer_code,x.organization_type].some(v=>String(v||'').toLowerCase().includes(q)));return send(res,200,{offers:rows.map(offerJson)});}
  const om=p.match(/^\/api\/offers\/([^/]+)$/);
@@ -129,7 +153,7 @@ async function route(req,res){
  if(req.method==='GET'&&p==='/api/analytics'){const a=eligibility();return send(res,200,{leadsBySource:many('SELECT COALESCE(source,\'не указан\') source,COUNT(*) count FROM leads GROUP BY source ORDER BY count DESC'),campaigns:many('SELECT id,name,status,eligible_count,skipped_count,simulated_at FROM campaigns ORDER BY id DESC'),consent:{personalData:Number(get('SELECT COUNT(*) n FROM leads WHERE personal_data_consent=1').n),advertising:Number(get('SELECT COUNT(*) n FROM leads WHERE advertising_consent=1').n),messaging:Number(get('SELECT COUNT(*) n FROM leads WHERE vk_messages_allowed=1').n),eligible:a.filter(x=>x.ok).length}});}
  if(p.startsWith('/api/'))return send(res,404,{error:'API endpoint not found'});
  if(!['GET','HEAD'].includes(req.method))return send(res,405,{error:'Method not allowed'});
- let rel=p==='/'?'index.html':path.normalize(decodeURIComponent(p)).replace(/^[/\\]+/,'');
+ let rel=(p==='/showcase'||p==='/showcase/')?'showcase.html':(p==='/'?'index.html':path.normalize(decodeURIComponent(p)).replace(/^[/\\]+/,''));
  const base=path.resolve(ROOT,'public-v2'),target=path.resolve(base,rel);
  if(!target.startsWith(base+path.sep))return send(res,403,{error:'Forbidden'});
  if(!fs.existsSync(target)||!fs.statSync(target).isFile())return send(res,404,{error:'Not found'});
