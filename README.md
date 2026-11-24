@@ -18,6 +18,7 @@ Included:
 ## Safety boundaries
 
 - Real VK delivery is hard-disabled in server-v2. The campaign send endpoint returns HTTP 423. Dry-run only calculates and records eligibility; it sends zero messages.
+- The public `/api/vk/callback` endpoint validates the configured community ID and secret, responds to VK's confirmation challenge, and stores deduplicated event metadata only. Message text and raw payloads are not stored. It does not send replies or create leads.
 - No group-member scraping, cold bulk messages, VK permission bypass or live VK Ads launch.
 - A phone number or imported row is not consent evidence. Eligibility requires a VK ID, separate personal-data consent with timestamp and evidence source, separate advertising consent with timestamp and evidence source, VK message permission with timestamp and evidence source, and no unsubscribe or suppression.
 - Unknown CPA URLs, ERID values, rates and campaign terms remain empty. Public research is not legal approval.
@@ -27,7 +28,9 @@ Included:
 
 Requirements: Node.js 22+.
 
-Set a unique ADMIN_PASSWORD in the environment, then start with node bootstrap.mjs. Open the Replit preview or http://localhost:3000.
+Set a unique ADMIN_PASSWORD in the environment, then start with node bootstrap.mjs. For Callback API, also configure VK_COMMUNITY_ID (defaults to 243658195 for this deployment), VK_CALLBACK_CONFIRMATION and VK_CALLBACK_SECRET in protected environment secrets. Start locally with test-only values; never commit real values. Open the Replit preview or http://localhost:3000.
+
+The admin Integrations page shows the callback URL and recent event metadata. Configure VK with `message_new`, `message_allow`, `message_deny`, `user_block` and `user_unblock` events. This endpoint only verifies and records inbound events; the bot dialogue and outbound API connection remain unimplemented and live sending stays disabled.
 
 CI restores the original catalogue bundle, runs tests from test-v2 and starts server-v2 to check that all 123 offers are imported as drafts.
 
