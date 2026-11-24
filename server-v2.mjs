@@ -92,7 +92,7 @@ async function sendOffersToVkUser(vkUserId,req){
   return;
  }
  const parts=['Подобрали предложения партнёров. Сравните условия и полную стоимость до оформления.'];
- for(let i=0;i<offers.length;i++){const o=offers[i];parts.push((i+1)+'. '+o.label+'\nРеклама. Рекламодатель: '+o.advertiser_name+'; сайт рекламодателя: '+o.advertiser_site+'; ERID: '+o.erid+'\n'+o.cpa_url);}
+ for(let i=0;i<offers.length;i++){const o=offers[i];parts.push((i+1)+'. '+o.label+'\nРеклама. Рекламодатель: '+o.advertiser_name+'; сайт рекламодателя: '+o.advertiser_site+'; ERID: '+o.erid);}
  const buttons=offers.map((o,i)=>({label:(i+1)+'. '+o.label.slice(0,35),link:o.cpa_url}));buttons.push({label:'Все предложения',link:allUrl,color:'secondary'});
  await sendVkBotMessage(vkUserId,parts.join('\n\n'),botKeyboard(buttons));
 }
