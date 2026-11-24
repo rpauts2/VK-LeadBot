@@ -11,9 +11,9 @@ Included:
 - SQLite import of 123 researched offer records and official brand assets.
 - Draft partner showcase seeded with 129 user-provided Bit-do links; 128 are visible for review, one (ЖелДорЗайм) is excluded because the Bank of Russia records it as no longer active and notes removal from the MFO register on 2020-01-27.
 - Separate public terms and editable CPA URL, ERID and internal note fields. Every offer stays draft and disabled.
-- CSV audience import with deduplication and evidence fields for personal-data consent, advertising consent and VK message permission.
+- CSV audience import retained for legacy/testing; it is not the user-facing offer-request flow.
 - Campaign drafts, eligibility preview, dry-run simulation and recipient decision logs.
-- Unsubscribe and suppression handling.
+- VK platform permission/block state is respected; no separate in-bot unsubscribe screen or STOP command is part of the user flow.
 - Password-protected admin session, rate-limited login, same-origin mutation checks and production Secure cookie.
 
 ## Safety boundaries
@@ -22,7 +22,7 @@ Included:
 - The public `/api/vk/callback` endpoint validates the configured community ID and secret, responds to VK's confirmation challenge, and stores deduplicated event metadata only. Message text and raw payloads are not stored. It does not send replies or create leads.
 - The draft showcase is available at `/showcase`. It shows names and categories only; outbound CPA clicks remain disabled until advertiser identity, campaign terms and ad labelling are reviewed. The protected admin summary reports ERID presence. Offer 2110 (Желдорзайм) is excluded: the Bank of Russia records the MFO-register entry as removed on 2020-01-27 at the organisation's request and the status as inactive.
 - No group-member scraping, cold bulk messages, VK permission bypass or live VK Ads launch.
-- A phone number or imported row is not consent evidence. Eligibility requires a VK ID, separate personal-data consent with timestamp and evidence source, separate advertising consent with timestamp and evidence source, VK message permission with timestamp and evidence source, and no unsubscribe or suppression.
+- A phone number or imported row is not, by itself, permission for unsolicited marketing. The product flow is request-led: the user starts the conversation and asks to receive offers. No separate advertising-consent screen, in-bot unsubscribe screen or STOP command is included. Do not send unsolicited promotional broadcasts; respect VK message-denial/block events and platform restrictions. Data processing and transfer to partners still require a valid legal basis, a privacy notice and appropriate safeguards.
 - Unknown CPA URLs, ERID values, rates and campaign terms remain empty. Public research is not legal approval.
 - Do not commit VK tokens, secrets or personal lead data. Add credentials only through protected Replit Secrets after separate review.
 
