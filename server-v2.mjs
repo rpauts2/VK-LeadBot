@@ -71,8 +71,9 @@ function saveSettings(v){run('INSERT INTO bot_settings(key,value_json,updated_at
 function leadView(l){return {id:l.id,vk_user_id:l.vk_user_id,phone:l.phone,source:l.source,personal_data_consent:!!l.personal_data_consent,personal_data_consent_at:l.personal_data_consent_at,personal_data_consent_source:l.personal_data_consent_source,advertising_consent:!!l.advertising_consent,advertising_consent_at:l.advertising_consent_at,advertising_consent_source:l.advertising_consent_source,vk_messages_allowed:!!l.vk_messages_allowed,vk_permission_at:l.vk_permission_at,vk_permission_source:l.vk_permission_source,unsubscribed:!!l.unsubscribed,suppressed:!!l.suppressed,eligible:canSendToLead(l).ok};}
 function withSuppression(){return many('SELECT l.*,CASE WHEN s.id IS NULL THEN 0 ELSE 1 END AS in_suppression FROM leads l LEFT JOIN suppression_list s ON (s.vk_user_id=l.vk_user_id AND l.vk_user_id IS NOT NULL) OR (s.phone=l.phone AND l.phone IS NOT NULL)');}
 function eligibility(){return withSuppression().map(l=>{const x=canSendToLead({...l,suppressed:!!l.suppressed||!!l.in_suppression});return {lead:l,ok:x.ok,reason:x.reason};});}
-function vkBotReady(){return process.env.VK_BOT_REPLIES_ENABLED==='true'&&Boolean(process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN)&&Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET);}
-function showcaseUrl(req){const base=process.env.PUBLIC_BASE_URL||('https://'+String(req.headers['x-forwarded-host']||req.headers.host||'localhost'));try{return new URL('/showcase',base).toString();}catch{return 'https://vk.ru/club243658195';}}
+function validPublicBaseUrl(){try{return new URL(process.env.PUBLIC_BASE_URL||'').protocol==='https:';}catch{return false;}}
+function vkBotReady(){return process.env.VK_BOT_REPLIES_ENABLED==='true'&&Boolean(process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN)&&Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET)&&validPublicBaseUrl();}
+function showcaseUrl(){try{return new URL('/showcase',process.env.PUBLIC_BASE_URL).toString();}catch{return 'https://vk.ru/club243658195';}}
 function botKeyboard(buttons){return JSON.stringify({one_time:false,buttons:buttons.map(b=>[{action:b.link?{type:'open_link',label:b.label,link:b.link}:{type:'text',label:b.label,payload:JSON.stringify(b.payload||{})},color:b.color||'primary'}])});}
 async function sendVkBotMessage(peerId,message,keyboard){
  const token=process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN;if(!vkBotReady()||!token)throw new Error('VK bot reply is disabled');
@@ -86,7 +87,7 @@ async function sendVkBotMessage(peerId,message,keyboard){
 }
 function publishedBotOffers(){return many("SELECT source_offer_code,label,cpa_url,erid,advertiser_name,advertiser_site FROM cpa_showcase_links WHERE block_reason IS NULL AND publication_enabled=1 AND erid_verified=1 AND terms_verified=1 AND erid IS NOT NULL AND erid<>'' AND erid<>'static' AND advertiser_name IS NOT NULL AND advertiser_name<>'' AND advertiser_site IS NOT NULL AND advertiser_site<>'' ORDER BY label COLLATE NOCASE LIMIT 4");}
 async function sendOffersToVkUser(vkUserId,req){
- const offers=publishedBotOffers(),allUrl=showcaseUrl(req);
+ const offers=publishedBotOffers(),allUrl=showcaseUrl();
  if(offers.length<4){
   await sendVkBotMessage(vkUserId,'Спасибо, номер сохранён. Сейчас проверяются четыре предложения партнёров. Когда все четыре будут готовы, бот сможет показать их здесь. Пока можно открыть предварительный каталог: '+allUrl,botKeyboard([{label:'Все предложения',link:allUrl,color:'primary'},{label:'Получить предложения',payload:{cmd:'get_offers'},color:'secondary'}]));
   return;
