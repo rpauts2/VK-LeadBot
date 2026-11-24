@@ -10,17 +10,17 @@ Included:
 - Russian-language responsive admin dashboard: overview, bot scenario, offers, leads, CSV import, campaigns, sources, analytics, integrations and settings.
 - SQLite import of 123 researched offer records and official brand assets.
 - Draft partner showcase seeded with 129 user-provided Bit-do links; 128 are visible for review, one (ЖелДорЗайм) is excluded because the Bank of Russia records it as no longer active and notes removal from the MFO register on 2020-01-27.
-- Separate public terms and editable CPA URL, ERID and internal note fields. Every offer stays draft and disabled.
+- CPA showcase has an admin review page. A link can be enabled only after the admin supplies the advertiser's legal name and HTTPS site and confirms the partner terms and ERID. The startup import preserves approvals only while the underlying CPA URL and ERID stay unchanged.
 - CSV audience import retained for legacy/testing; it is not the user-facing offer-request flow.
-- Campaign drafts, eligibility preview, dry-run simulation and recipient decision logs.
-- VK platform permission/block state is respected; no separate in-bot unsubscribe screen or STOP command is part of the user flow.
+- Request-led VK bot dialogue: greeting, “Получить предложения” button, short phone-use notice, phone capture and offer response. It only processes a private message initiated by the user; Callback event IDs are deduplicated.
+- No separate consent screens, in-bot unsubscribe screen, STOP command or stored consent-event history. Existing consent-history table is removed on startup. VK message-denial and user-block events are still respected.
 - Password-protected admin session, rate-limited login, same-origin mutation checks and production Secure cookie.
 
 ## Safety boundaries
 
-- Real VK delivery is hard-disabled in server-v2. The campaign send endpoint returns HTTP 423. Dry-run only calculates and records eligibility; it sends zero messages.
-- The public `/api/vk/callback` endpoint validates the configured community ID and secret, responds to VK's confirmation challenge, and stores deduplicated event metadata only. Message text and raw payloads are not stored. It does not send replies or create leads.
-- The draft showcase is available at `/showcase`. It shows names and categories only; outbound CPA clicks remain disabled until advertiser identity, campaign terms and ad labelling are reviewed. The protected admin summary reports ERID presence. Offer 2110 (Желдорзайм) is excluded: the Bank of Russia records the MFO-register entry as removed on 2020-01-27 at the organisation's request and the status as inactive.
+- Bulk campaign delivery remains hard-disabled: the campaign send endpoint returns HTTP 423, and dry-run sends zero messages. One-to-one bot replies are a separate feature, disabled by default, and can only be enabled with a community token plus `VK_BOT_REPLIES_ENABLED=true`. The bot responds only to a user's inbound private message.
+- The public `/api/vk/callback` endpoint validates the configured community ID and secret, responds to VK's confirmation challenge and stores deduplicated event metadata. Message text and raw payloads are not stored. When bot replies are enabled, incoming messages drive the request-led dialogue and a valid phone number is stored as a lead.
+- The showcase is available at `/showcase`. It initially displays draft cards without outbound links. After manual review, approved cards show the legal advertiser, advertiser site, “Реклама” label and ERID. The bot sends at most four approved offers plus a fifth “Все предложения” button. With fewer than four approved offers, it only sends those approved and links to the catalogue. Offer 2110 (Желдорзайм) remains excluded.
 - No group-member scraping, cold bulk messages, VK permission bypass or live VK Ads launch.
 - A phone number or imported row is not, by itself, permission for unsolicited marketing. The product flow is request-led: the user starts the conversation and asks to receive offers. No separate advertising-consent screen, in-bot unsubscribe screen or STOP command is included. Do not send unsolicited promotional broadcasts; respect VK message-denial/block events and platform restrictions. Data processing and transfer to partners still require a valid legal basis, a privacy notice and appropriate safeguards.
 - Unknown CPA URLs, ERID values, rates and campaign terms remain empty. Public research is not legal approval.
@@ -30,11 +30,11 @@ Included:
 
 Requirements: Node.js 22+.
 
-Set a unique ADMIN_PASSWORD in the environment, then start with node bootstrap.mjs. For Callback API, also configure VK_COMMUNITY_ID (defaults to 243658195 for this deployment), VK_CALLBACK_CONFIRMATION and VK_CALLBACK_SECRET in protected environment secrets. Start locally with test-only values; never commit real values. Open the Replit preview or http://localhost:3000.
+Set a unique `ADMIN_PASSWORD`, then start with `node bootstrap.mjs`. For Callback API, configure `VK_COMMUNITY_ID=243658195`, `VK_CALLBACK_CONFIRMATION` and `VK_CALLBACK_SECRET`. To enable replies to users who message the community, additionally configure `VK_ACCESS_TOKEN` (community token), `VK_BOT_REPLIES_ENABLED=true` and `PUBLIC_BASE_URL` (the public HTTPS origin). Keep these in Replit Secrets, never in GitHub or chat. Without the token and explicit flag, the bot records inbound events but does not reply. Open the Replit preview or http://localhost:3000.
 
-The admin Integrations page shows the callback URL and recent event metadata. Configure VK with `message_new`, `message_allow`, `message_deny`, `user_block` and `user_unblock` events. This endpoint only verifies and records inbound events; the bot dialogue and outbound API connection remain unimplemented and live sending stays disabled.
+The admin Integrations page shows the callback URL, bot reply status and recent event metadata. Configure VK with `message_new`, `message_allow`, `message_deny`, `user_block` and `user_unblock` events. The bot accepts a phone number sent as text after the user chooses to receive offers. A phone already linked to another VK ID is rejected. Direct partner links are returned only after admin approval in the CPA showcase. No automated advertising campaigns are enabled.
 
-CI restores the original catalogue bundle, runs tests from test-v2 and starts server-v2 to check that all 123 offers are imported as drafts.
+CI restores the original catalogue bundle, runs unit/API tests and checks the imported catalogue. The VK bot flow has an integration test using a local mock of VK API; it never sends real messages.
 
 ## CSV columns
 
