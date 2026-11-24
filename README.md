@@ -9,7 +9,7 @@ The Replit entrypoint restores the original catalogue bundle and starts the main
 Included:
 - Russian-language responsive admin dashboard: overview, bot scenario, offers, leads, CSV import, campaigns, sources, analytics, integrations and settings.
 - SQLite import of 123 researched offer records and official brand assets.
-- Draft partner showcase seeded with 129 user-provided Bit-do links; 128 are visible for review, one is excluded based on the revoked-license research flag.
+- Draft partner showcase seeded with 129 user-provided Bit-do links; 128 are visible for review, one (ЖелДорЗайм) is excluded because the Bank of Russia records it as no longer active and notes removal from the MFO register on 2020-01-27.
 - Separate public terms and editable CPA URL, ERID and internal note fields. Every offer stays draft and disabled.
 - CSV audience import with deduplication and evidence fields for personal-data consent, advertising consent and VK message permission.
 - Campaign drafts, eligibility preview, dry-run simulation and recipient decision logs.
@@ -20,7 +20,7 @@ Included:
 
 - Real VK delivery is hard-disabled in server-v2. The campaign send endpoint returns HTTP 423. Dry-run only calculates and records eligibility; it sends zero messages.
 - The public `/api/vk/callback` endpoint validates the configured community ID and secret, responds to VK's confirmation challenge, and stores deduplicated event metadata only. Message text and raw payloads are not stored. It does not send replies or create leads.
-- The draft showcase is available at `/showcase`. It shows names and categories only; outbound CPA clicks remain disabled until advertiser identity, campaign terms and ad labelling are reviewed. The protected admin summary reports ERID presence. Offer 2110 (Желдорзайм) is excluded due to the revoked-license flag in the source research.
+- The draft showcase is available at `/showcase`. It shows names and categories only; outbound CPA clicks remain disabled until advertiser identity, campaign terms and ad labelling are reviewed. The protected admin summary reports ERID presence. Offer 2110 (Желдорзайм) is excluded: the Bank of Russia records the MFO-register entry as removed on 2020-01-27 at the organisation's request and the status as inactive.
 - No group-member scraping, cold bulk messages, VK permission bypass or live VK Ads launch.
 - A phone number or imported row is not consent evidence. Eligibility requires a VK ID, separate personal-data consent with timestamp and evidence source, separate advertising consent with timestamp and evidence source, VK message permission with timestamp and evidence source, and no unsubscribe or suppression.
 - Unknown CPA URLs, ERID values, rates and campaign terms remain empty. Public research is not legal approval.
