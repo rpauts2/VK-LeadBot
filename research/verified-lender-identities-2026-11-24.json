@@ -1,0 +1,56 @@
+{
+  "checked_at": "2026-11-24",
+  "purpose": "Prefill lender identity data for CPA showcase review only. This file does not approve advertising, verify ERID, verify CPA campaign terms, or enable outbound links.",
+  "sources": "Bank of Russia financial-organization cards for each listed legal entity; official lender/brand site shown below.",
+  "records": [
+    {
+      "source_offer_code": "2590",
+      "label": "GreenMoney",
+      "cpa_erid": "2VtzqvmMLmR",
+      "legal_entity": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ МИКРОКРЕДИТНАЯ КОМПАНИЯ «СТАБИЛЬНЫЕ ФИНАНСЫ»",
+      "inn": "7704493556",
+      "ogrn": "1197746381876",
+      "registry_entry": "1903045009345",
+      "status": "Действует",
+      "official_site": "https://greenmoney.ru/",
+      "cbr_url": "https://www.cbr.ru/finorg/foinfo/?inn=7704493556"
+    },
+    {
+      "source_offer_code": "2097",
+      "label": "Credelix",
+      "cpa_erid": "2W5zFJheh37",
+      "legal_entity": "Общество с ограниченной ответственностью Микрокредитная компания «Флорин»",
+      "inn": "9723249204",
+      "ogrn": "1257700095839",
+      "registry_entry": "2503045010147",
+      "status": "Действует",
+      "official_site": "https://credelix.ru/",
+      "cbr_url": "https://www.cbr.ru/finorg/foinfo/?ogrn=1257700095839",
+      "brand_documents_url": "https://credelix.ru/documents/"
+    },
+    {
+      "source_offer_code": "2589",
+      "label": "Давака",
+      "cpa_erid": "2W5zFHw4NrU",
+      "legal_entity": "Общество с ограниченной ответственностью Микрокредитная компания «Да-кредит»",
+      "inn": "5262392883",
+      "ogrn": "1235200029107",
+      "registry_entry": "2403322010013",
+      "status": "Действует",
+      "official_site": "https://davaka.ru/",
+      "cbr_url": "https://www.cbr.ru/finorg/foinfo/?ogrn=1235200029107"
+    },
+    {
+      "source_offer_code": "2802",
+      "label": "Snapcredit",
+      "cpa_erid": "2SDnjcRUC4z",
+      "legal_entity": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ МИКРОКРЕДИТНАЯ КОМПАНИЯ «СНАПКРЕДИТ»",
+      "inn": "9716002799",
+      "ogrn": "1247700761220",
+      "registry_entry": "2403045010127",
+      "status": "Действует",
+      "official_site": "https://snapcredit.ru/",
+      "cbr_url": "https://www.cbr.ru/finorg/foinfo/?ogrn=1247700761220"
+    }
+  ]
+}
