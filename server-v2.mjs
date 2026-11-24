@@ -21,7 +21,7 @@ db.exec([
 'CREATE TABLE IF NOT EXISTS sources(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,url TEXT,source_type TEXT NOT NULL DEFAULT "manual",notes TEXT,created_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS bot_settings(key TEXT PRIMARY KEY,value_json TEXT NOT NULL,updated_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS suppression_list(id INTEGER PRIMARY KEY AUTOINCREMENT,vk_user_id TEXT,phone TEXT,reason TEXT NOT NULL,added_at TEXT NOT NULL)'
-].join('\n'));
+].join(';\n') + ';');
 db.exec('CREATE INDEX IF NOT EXISTS idx_lead_eligibility ON leads(advertising_consent,vk_messages_allowed,unsubscribed,suppressed); CREATE INDEX IF NOT EXISTS idx_campaign_recipient ON campaign_recipients(campaign_id);');
 const now=()=>new Date().toISOString(), sessions=new Map(), attempts=new Map();
 const DEFAULT={bot:{greeting:'Здравствуйте! Поможем ознакомиться с доступными предложениями. Мы не являемся кредитором и не гарантируем одобрение.',explanation:'Вы можете отдельно согласиться на обработку данных и получение рекламных предложений. Согласие на рекламу добровольное.',personalDataConsent:'Я согласен(на) на обработку персональных данных согласно политике конфиденциальности.',advertisingConsent:'Я отдельно согласен(на) получать рекламные сообщения. Согласие можно отозвать в любое время.',phonePrompt:'Укажите номер телефона для обратной связи.',offersIntro:'Ниже представлены предложения. Изучите условия на сайте поставщика.',support:'По вопросам работы сервиса обратитесь в поддержку.'},privacyUrl:'',supportUrl:'',vkGroupUrl:'',integrations:{vkCommunityId:'',vkApiConnected:false,callbackSecretConfigured:false},liveMessagingEnabled:false};
