@@ -20,7 +20,8 @@ db.exec([
 'CREATE TABLE IF NOT EXISTS campaign_recipients(id INTEGER PRIMARY KEY AUTOINCREMENT,campaign_id INTEGER NOT NULL,lead_id INTEGER NOT NULL,decision TEXT NOT NULL,reason TEXT,simulated_at TEXT NOT NULL,FOREIGN KEY(campaign_id) REFERENCES campaigns(id),FOREIGN KEY(lead_id) REFERENCES leads(id))',
 'CREATE TABLE IF NOT EXISTS sources(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,url TEXT,source_type TEXT NOT NULL DEFAULT \'manual\',notes TEXT,created_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS bot_settings(key TEXT PRIMARY KEY,value_json TEXT NOT NULL,updated_at TEXT NOT NULL)',
-'CREATE TABLE IF NOT EXISTS suppression_list(id INTEGER PRIMARY KEY AUTOINCREMENT,vk_user_id TEXT,phone TEXT,reason TEXT NOT NULL,added_at TEXT NOT NULL)'
+'CREATE TABLE IF NOT EXISTS suppression_list(id INTEGER PRIMARY KEY AUTOINCREMENT,vk_user_id TEXT,phone TEXT,reason TEXT NOT NULL,added_at TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS vk_inbound_events(event_id TEXT PRIMARY KEY,event_type TEXT NOT NULL,vk_user_id TEXT,message_id TEXT,peer_id TEXT,received_at TEXT NOT NULL)'
 ].join(';\n') + ';');
 db.exec('CREATE INDEX IF NOT EXISTS idx_lead_eligibility ON leads(advertising_consent,vk_messages_allowed,unsubscribed,suppressed); CREATE INDEX IF NOT EXISTS idx_campaign_recipient ON campaign_recipients(campaign_id);');
 const now=()=>new Date().toISOString(), sessions=new Map(), attempts=new Map();
@@ -69,7 +70,7 @@ function importLead(v){
 }
 async function route(req,res){
  const u=new URL(req.url,'http://'+(req.headers.host||'localhost')),p=u.pathname;
- if(req.method==='GET'&&p==='/api/health')return send(res,200,{ok:true,totalOffers:Number(get('SELECT COUNT(*) n FROM offers').n),offersDraft:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\' AND bot_enabled=0').n),bootImport,liveMessagingEnabled:false});
+ if(req.method==='GET'&&p==='/api/health')return send(res,200,{ok:true,totalOffers:Number(get('SELECT COUNT(*) n FROM offers').n),offersDraft:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\' AND bot_enabled=0').n),bootImport,liveMessagingEnabled:false,vkCommunityId:String(process.env.VK_COMMUNITY_ID||'243658195'),vkCallbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET)});
  if(req.method==='POST'&&p==='/api/login'){
   const ip=req.socket.remoteAddress||'unknown',a=attempts.get(ip)||{n:0,until:0};if(a.until>Date.now())return send(res,429,{error:'Слишком много попыток'});
   const d=await readBody(req,20000),password=process.env.ADMIN_PASSWORD||'';
@@ -78,12 +79,39 @@ async function route(req,res){
   return send(res,200,{ok:true},{'set-cookie':'vk_leadbot_session='+token+'; HttpOnly; SameSite=Strict; Path=/; Max-Age=43200'+(process.env.NODE_ENV==='production'?'; Secure':'')});
  }
  if(req.method==='POST'&&p==='/api/logout'){const t=parseCookies(req).vk_leadbot_session;if(t)sessions.delete(t);return send(res,200,{ok:true},{'set-cookie':'vk_leadbot_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'});}
+ if(req.method==='POST'&&p==='/api/vk/callback'){
+  const d=await readBody(req,200000),groupId=Number(d.group_id),expectedGroup=Number(process.env.VK_COMMUNITY_ID||'243658195'),expectedSecret=process.env.VK_CALLBACK_SECRET||'';
+  if(!Number.isSafeInteger(groupId)||groupId!==expectedGroup)return send(res,403,{error:'Неверный ID сообщества'});
+  if(!expectedSecret||!same(d.secret,expectedSecret))return send(res,403,{error:'Неверный секрет Callback API'});
+  if(d.type==='confirmation'){
+   const confirmation=process.env.VK_CALLBACK_CONFIRMATION||'';
+   if(!confirmation)return send(res,503,{error:'Не задан VK_CALLBACK_CONFIRMATION'});
+   res.writeHead(200,{'content-type':'text/plain; charset=utf-8','cache-control':'no-store'});res.end(confirmation);return;
+  }
+  const type=str(d.type,80),o=d.object&&typeof d.object==='object'?d.object:{};
+  if(['message_new','message_allow','message_deny','user_block','user_unblock'].includes(type)){
+   const m=o.message&&typeof o.message==='object'?o.message:o;
+   const user=Number(m.from_id||o.user_id||0),vkUserId=Number.isSafeInteger(user)&&user>0?String(user):null;
+   const messageId=m.id==null?null:String(m.id),peerId=m.peer_id==null?null:String(m.peer_id);
+   const eventId=str(d.event_id,200)||crypto.createHash('sha256').update(JSON.stringify(d)).digest('hex');
+   run('INSERT OR IGNORE INTO vk_inbound_events(event_id,event_type,vk_user_id,message_id,peer_id,received_at) VALUES(?,?,?,?,?,?)',eventId,type,vkUserId,messageId,peerId,now());
+   if(vkUserId&&type==='message_allow')run('UPDATE leads SET vk_messages_allowed=1,vk_permission_at=?,vk_permission_source=?,updated_at=? WHERE vk_user_id=?',now(),'vk_callback:message_allow',now(),vkUserId);
+   if(vkUserId&&type==='message_deny')run('UPDATE leads SET vk_messages_allowed=0,vk_permission_at=NULL,vk_permission_source=NULL,updated_at=? WHERE vk_user_id=?',now(),vkUserId);
+   if(vkUserId&&type==='user_block'){
+    run('UPDATE leads SET vk_messages_allowed=0,vk_permission_at=NULL,vk_permission_source=NULL,suppressed=1,updated_at=? WHERE vk_user_id=?',now(),vkUserId);
+    run('INSERT INTO suppression_list(vk_user_id,phone,reason,added_at) SELECT ?,NULL,?,? WHERE NOT EXISTS (SELECT 1 FROM suppression_list WHERE vk_user_id=?)',vkUserId,'vk-user-block',now(),vkUserId);
+   }
+   if(vkUserId&&type==='user_unblock')run('UPDATE leads SET suppressed=0,updated_at=? WHERE vk_user_id=?',now(),vkUserId);
+  }
+  res.writeHead(200,{'content-type':'text/plain; charset=utf-8','cache-control':'no-store'});res.end('ok');return;
+ }
  if(p.startsWith('/api/')&&!auth(req,res))return;
  if(p.startsWith('/api/')&&req.method!=='GET'&&!originOk(req))return send(res,403,{error:'Недопустимый источник запроса'});
  if(req.method==='GET'&&p==='/api/dashboard'){const e=eligibility();return send(res,200,{counts:{offers:Number(get('SELECT COUNT(*) n FROM offers').n),draftOffers:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\'').n),leads:Number(get('SELECT COUNT(*) n FROM leads').n),eligible:e.filter(x=>x.ok).length,campaigns:Number(get('SELECT COUNT(*) n FROM campaigns').n),sources:Number(get('SELECT COUNT(*) n FROM sources').n)},liveMessagingEnabled:false,recentCampaigns:many('SELECT * FROM campaigns ORDER BY id DESC LIMIT 5')});}
  if(req.method==='GET'&&p==='/api/offers'){const q=str(u.searchParams.get('q'),200).toLowerCase();const rows=many('SELECT * FROM offers ORDER BY supplied_label COLLATE NOCASE').filter(x=>!q||[x.supplied_label,x.official_brand,x.source_offer_code,x.organization_type].some(v=>String(v||'').toLowerCase().includes(q)));return send(res,200,{offers:rows.map(offerJson)});}
  const om=p.match(/^\/api\/offers\/([^/]+)$/);
  if(req.method==='PATCH'&&om){const code=decodeURIComponent(om[1]),d=await readBody(req);if(!get('SELECT source_offer_code FROM offers WHERE source_offer_code=?',code))return send(res,404,{error:'Предложение не найдено'});let cpa=d.cpa_url===undefined?undefined:str(d.cpa_url,2000);if(cpa){try{if(new URL(cpa).protocol!=='https:')throw 0;}catch{return send(res,400,{error:'CPA ссылка должна быть корректным HTTPS URL'});}}const erid=d.erid===undefined?undefined:str(d.erid,300),note=d.internal_note===undefined?undefined:str(d.internal_note,3000);run('UPDATE offers SET cpa_url=COALESCE(?,cpa_url),erid=COALESCE(?,erid),internal_note=COALESCE(?,internal_note),status=\'draft\',bot_enabled=0,updated_at=? WHERE source_offer_code=?',cpa===undefined?null:cpa,erid===undefined?null:erid,note===undefined?null:note,now(),code);return send(res,200,{ok:true,offer:offerJson(get('SELECT * FROM offers WHERE source_offer_code=?',code))});}
+ if(req.method==='GET'&&p==='/api/vk/events')return send(res,200,{events:many('SELECT event_id,event_type,vk_user_id,message_id,peer_id,received_at FROM vk_inbound_events ORDER BY received_at DESC LIMIT 100'),total:Number(get('SELECT COUNT(*) n FROM vk_inbound_events').n),callbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET),communityId:String(process.env.VK_COMMUNITY_ID||'243658195')});
  if(req.method==='GET'&&p==='/api/leads')return send(res,200,{leads:many('SELECT * FROM leads ORDER BY id DESC LIMIT 1000').map(leadView)});
  if(req.method==='POST'&&p==='/api/leads/import'){const d=await readBody(req);if(!Array.isArray(d.rows)||d.rows.length>5000)return send(res,400,{error:'Ожидается rows до 5000 строк'});const result={imported:0,updated:0,skipped:0,reasons:{}};db.exec('SAVEPOINT audience_import');try{for(const row of d.rows){const x=importLead(row||{});if(x.skip){result.skipped++;result.reasons[x.skip]=(result.reasons[x.skip]||0)+1;}else if(x.updated)result.updated++;else result.imported++;}db.exec('RELEASE audience_import');}catch(e){db.exec('ROLLBACK TO audience_import; RELEASE audience_import');throw e;}return send(res,200,result);}
  const lm=p.match(/^\/api\/leads\/(\d+)\/(unsubscribe|suppress|unsuppress)$/);
