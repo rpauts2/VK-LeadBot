@@ -1,4 +1,4 @@
-name: validate-catalog
+name: validate-vk-leadbot
 on:
   push:
     branches: [main]
@@ -15,22 +15,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Restore app source
+      - name: Restore bundled catalogue
         run: RESTORE_ONLY=1 node bootstrap.mjs
-      - name: Run tests
-        run: npm test
-      - name: Check syntax
-        run: npm run check
-      - name: Start app and verify imported catalog
+      - name: Run unit and API tests
+        run: node --test test-v2/*.test.mjs
+      - name: Check JavaScript syntax
+        run: |
+          node --check server-v2.mjs
+          node --check lib/core-v2.mjs
+          node --check public-v2/app.js
+      - name: Start app and verify imported catalogue
         shell: bash
         run: |
-          PORT=4173 DATABASE_PATH=.data/ci.sqlite ADMIN_PASSWORD=ci-only-test-password npm start > /tmp/vk-leadbot.log 2>&1 &
+          PORT=4173 DATABASE_PATH=.data/ci-v2.sqlite ADMIN_PASSWORD=ci-only-test-password node server-v2.mjs > /tmp/vk-leadbot.log 2>&1 &
           APP_PID=$!
           trap 'kill "$APP_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4173/api/health > /tmp/vk-leadbot-health.json; then
-              break
-            fi
+            if curl -fsS http://127.0.0.1:4173/api/health > /tmp/vk-leadbot-health.json; then break; fi
             sleep 1
           done
-          node --input-type=module -e "import fs from 'node:fs'; const h=JSON.parse(fs.readFileSync('/tmp/vk-leadbot-health.json','utf8')); if (!h.ok || h.totalOffers !== 123 || h.offersDraft !== 123) { console.error(h); process.exit(1); } console.log(JSON.stringify({ok:h.ok,totalOffers:h.totalOffers,offersDraft:h.offersDraft,offersWithLogo:h.offersWithLogo,bootImport:h.bootImport}));"
+          node --input-type=module -e "import fs from 'node:fs'; const h=JSON.parse(fs.readFileSync('/tmp/vk-leadbot-health.json','utf8')); if (!h.ok || h.totalOffers !== 123 || h.offersDraft !== 123 || h.liveMessagingEnabled !== false) { console.error(h); process.exit(1); } console.log(JSON.stringify(h));"
