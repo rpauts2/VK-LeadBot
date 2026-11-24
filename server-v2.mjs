@@ -87,8 +87,8 @@ async function sendVkBotMessage(peerId,message,keyboard){
 function publishedBotOffers(){return many("SELECT source_offer_code,label,cpa_url,erid,advertiser_name,advertiser_site FROM cpa_showcase_links WHERE block_reason IS NULL AND publication_enabled=1 AND erid_verified=1 AND terms_verified=1 AND erid IS NOT NULL AND erid<>'' AND erid<>'static' AND advertiser_name IS NOT NULL AND advertiser_name<>'' AND advertiser_site IS NOT NULL AND advertiser_site<>'' ORDER BY label COLLATE NOCASE LIMIT 4");}
 async function sendOffersToVkUser(vkUserId,req){
  const offers=publishedBotOffers(),allUrl=showcaseUrl(req);
- if(!offers.length){
-  await sendVkBotMessage(vkUserId,'Спасибо, номер сохранён. Сейчас партнёрские предложения проходят проверку, поэтому прямые переходы пока недоступны. Предварительный каталог: '+allUrl,botKeyboard([{label:'Все предложения',link:allUrl,color:'primary'},{label:'Получить предложения',payload:{cmd:'get_offers'},color:'secondary'}]));
+ if(offers.length<4){
+  await sendVkBotMessage(vkUserId,'Спасибо, номер сохранён. Сейчас проверяются четыре предложения партнёров. Когда все четыре будут готовы, бот сможет показать их здесь. Пока можно открыть предварительный каталог: '+allUrl,botKeyboard([{label:'Все предложения',link:allUrl,color:'primary'},{label:'Получить предложения',payload:{cmd:'get_offers'},color:'secondary'}]));
   return;
  }
  const parts=['Подобрали предложения партнёров. Сравните условия и полную стоимость до оформления.'];
