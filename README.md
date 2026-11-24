@@ -11,6 +11,7 @@ Included:
 - SQLite import of 123 researched offer records and official brand assets.
 - Draft partner showcase seeded with 129 user-provided Bit-do links; 128 are visible for review, one (ЖелДорЗайм) is excluded because the Bank of Russia records it as no longer active and notes removal from the MFO register on 2020-01-27.
 - CPA showcase has an admin review page. A link can be enabled only after the admin supplies the advertiser's legal name and HTTPS site and confirms the partner terms and ERID. The startup import preserves approvals only while the underlying CPA URL and ERID stay unchanged.
+- Four CPA records are prefilled with lender legal identity and brand site only when their exact supplied ERID matches the dated Bank of Russia identity reference file. This is a convenience for review, not ad approval: ERID and partner terms remain unverified, and all four stay disabled.
 - CSV audience import retained for legacy/testing; it is not the user-facing offer-request flow.
 - Request-led VK bot dialogue: greeting, “Получить предложения” button, short phone-use notice, phone capture and offer response. It only processes a private message initiated by the user; Callback event IDs are deduplicated.
 - No separate consent screens, in-bot unsubscribe screen, STOP command or stored consent-event history. Existing consent-history table is removed on startup. VK message-denial and user-block events are still respected.
@@ -46,6 +47,7 @@ CSV import is for legacy/test records only. It does not trigger the VK dialogue,
 
 - research/official-offer-enrichment-2026-11-22.json — 123 enriched source records.
 - research/cpa-offer-links-2026-11-24.json — 129 CPA URLs supplied by the user; URLs and ERID strings preserved as received and not independently validated.
+- research/verified-lender-identities-2026-11-24.json — four lender identity/registry references checked against Bank of Russia cards; CPA ERID and partner terms are deliberately not marked verified.
 - research/official-brand-assets-2026-11-22.json — official logo and image references.
 
 Research checked on 2026-11-22; manual legal and campaign-specific validation remains required.
