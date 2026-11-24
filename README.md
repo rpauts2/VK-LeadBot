@@ -36,11 +36,11 @@ The admin Integrations page shows the callback URL, bot reply status and recent 
 
 CI restores the original catalogue bundle, runs unit/API tests and checks the imported catalogue. The VK bot flow has an integration test using a local mock of VK API; it never sends real messages.
 
-## CSV columns
+## CSV import (legacy/testing)
 
-vk_user_id, phone, source, personal_data_consent, personal_data_consent_at, personal_data_consent_source, advertising_consent, advertising_consent_at, advertising_consent_source, vk_messages_allowed, vk_messages_allowed_at, vk_messages_allowed_source.
+Supported columns: `vk_user_id, phone, source`.
 
-A true consent is accepted only with matching timestamp and evidence source. False revokes the corresponding permission. Blank values do not upgrade permissions. Do not import data without a documented lawful basis.
+CSV import is for legacy/test records only. It does not trigger the VK dialogue, grant marketing permission or enable campaign sending. New real leads are created when a user starts a conversation with the community and sends a phone number in reply to the offer request.
 
 ## Supplied research
 
