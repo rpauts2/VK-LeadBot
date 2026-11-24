@@ -80,6 +80,7 @@ test('VK bot replies to an incoming request, captures phone and sends four revie
  const list=await fetch('http://127.0.0.1:'+port+'/api/showcase/links',{headers});
  assert.equal(list.status,200);
  const catalog=await list.json();
+ for(const code of ['2590','2097','2589','2802']){const row=catalog.links.find(x=>x.source_offer_code===code);assert.ok(row?.advertiser_name,'official legal entity should be prefilled for '+code);assert.ok(row.advertiser_site?.startsWith('https://'),'official HTTPS site should be prefilled for '+code);assert.equal(row.publication_enabled,0,'prefilled identity must not publish '+code);assert.equal(row.erid_verified,0,'user-provided ERID must not be treated as verified '+code);}
  const approvable=catalog.links.filter(x=>x.erid&&x.erid!=='static').slice(0,4);
  assert.equal(approvable.length,4);
  for(const offer of approvable){
