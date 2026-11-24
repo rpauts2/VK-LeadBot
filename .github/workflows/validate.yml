@@ -17,13 +17,14 @@ jobs:
           node-version: 22
       - name: Restore bundled catalogue
         run: RESTORE_ONLY=1 node bootstrap.mjs
-      - name: Run unit and API tests
-        run: node --test test-v2/*.test.mjs
       - name: Check JavaScript syntax
         run: |
           node --check server-v2.mjs
           node --check lib/core-v2.mjs
           node --check public-v2/app.js
+          node --check test-v2/api.test.mjs
+      - name: Run unit and API tests
+        run: node --test test-v2/*.test.mjs
       - name: Start app and verify imported catalogue
         shell: bash
         run: |
