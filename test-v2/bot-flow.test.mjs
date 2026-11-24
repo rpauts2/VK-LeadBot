@@ -71,7 +71,7 @@ test('VK bot replies to an incoming request, captures phone and sends four revie
  response=await message('bot-flow-2',2,'Получить предложения');
  assert.equal(response.status,200);assert.equal(calls.length,2);
  assert.match(calls[1].get('message'),/отправьте номер телефона/i);
- assert.match(calls[1].get('message'),/партнёрами/i);
+ assert.match(calls[1].get('message'),/партнёрам/i);
 
  const login=await postJson('http://127.0.0.1:'+port+'/api/login',{password:'ci-test-password'});
  assert.equal(login.status,200);
