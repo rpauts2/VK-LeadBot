@@ -99,6 +99,7 @@ test('VK bot replies to an incoming request, captures phone and sends four revie
  assert.match(reply,/Реклама\./);
  const keyboard=JSON.parse(calls[2].get('keyboard'));
  assert.equal(keyboard.buttons.length,5);
+ for(let i=0;i<approvable.length;i++)assert.equal(keyboard.buttons[i][0].action.link,approvable[i].cpa_url);
  assert.equal(keyboard.buttons[4][0].action.label,'Все предложения');
  assert.equal(keyboard.buttons[4][0].action.link,'https://bot.example.test/showcase');
 
