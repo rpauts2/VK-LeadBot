@@ -7,23 +7,25 @@
       "source_offer_code": "1787",
       "label": "ЛигаМФО",
       "url": "https://bit-do.ru/1787-1000326-bAaSVpkkszJ?erid=2W5zFJAfjE8",
-      "erid": null,
+      "erid": "2W5zFJAfjE8",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2100",
       "label": "Деньга — Выдача (Лесенка)",
       "url": "https://bit-do.ru/2100-1000326-g06bUDgaacAJ?erid=LjN8KPoy3",
-      "erid": null,
+      "erid": "LjN8KPoy3",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "433",
@@ -34,18 +36,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "983",
       "label": "Финмолл — МФО Выдача",
       "url": "https://bit-do.ru/983-1000326-XKoUj2gghQq?erid=2SDnjd4YnrC",
-      "erid": null,
+      "erid": "2SDnjd4YnrC",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "513",
@@ -56,7 +60,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "511",
@@ -67,7 +72,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1638",
@@ -78,7 +84,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "540",
@@ -89,7 +96,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "441",
@@ -100,7 +108,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "439",
@@ -111,7 +120,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "483",
@@ -122,7 +132,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "460",
@@ -133,7 +144,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1718",
@@ -144,18 +156,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2594",
       "label": "MoneyMan",
       "url": "https://bit-do.ru/2594-1000326-j4dmSX4MMi0r?erid=2VtzqxFgkzy",
-      "erid": null,
+      "erid": "2VtzqxFgkzy",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2160",
@@ -166,7 +180,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1645",
@@ -177,7 +192,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1753",
@@ -188,7 +204,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1797",
@@ -199,29 +216,32 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "935",
       "label": "Max.Credit — МФО Выдача",
       "url": "https://bit-do.ru/935-1000326-DPEivW33tbK?erid=2SDnjcT1SY3",
-      "erid": null,
+      "erid": "2SDnjcT1SY3",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "827",
       "label": "ЛайкЗайм — МФО Выдача",
       "url": "https://bit-do.ru/827-1000326-8XQfEY55taj?erid=2SDnjevMQUa",
-      "erid": null,
+      "erid": "2SDnjevMQUa",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "581",
@@ -232,7 +252,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "545",
@@ -243,7 +264,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "430",
@@ -254,7 +276,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "422",
@@ -265,7 +288,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1795",
@@ -276,7 +300,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1713",
@@ -287,18 +312,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "968",
       "label": "Быстроденьги — МФО Выдача",
       "url": "https://bit-do.ru/968-1000326-Eb0TBRvvTB2?erid=2SDnjeVLMFy",
-      "erid": null,
+      "erid": "2SDnjeVLMFy",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1545",
@@ -309,29 +336,32 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2590",
       "label": "GreenMoney — Выдача",
       "url": "https://bit-do.ru/2590-1000326-550jSjvPPhw9?erid=2VtzqvmMLmR",
-      "erid": null,
+      "erid": "2VtzqvmMLmR",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1375",
       "label": "Эквазайм — МФО Выдача",
       "url": "https://bit-do.ru/1375-1000326-Z8YHJ022Cev?erid=2SDnjc7SYaE",
-      "erid": null,
+      "erid": "2SDnjc7SYaE",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1730",
@@ -342,7 +372,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1626",
@@ -353,18 +384,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2585",
       "label": "Микрорезерв",
       "url": "https://bit-do.ru/2585-1000326-rVeLcp5jjUXP?erid=2W5zFJGZw9B",
-      "erid": null,
+      "erid": "2W5zFJGZw9B",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "544",
@@ -375,7 +408,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "467",
@@ -386,7 +420,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "449",
@@ -397,7 +432,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2636",
@@ -408,7 +444,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2635",
@@ -419,7 +456,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2634",
@@ -430,7 +468,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1623",
@@ -441,7 +480,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1611",
@@ -452,7 +492,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1721",
@@ -463,7 +504,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1634",
@@ -474,29 +516,32 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "950",
       "label": "Альфа Деньги — МФО",
       "url": "https://bit-do.ru/950-1000326-jrQFX4MMi0r?erid=2SDnjdr3sYP",
-      "erid": null,
+      "erid": "2SDnjdr3sYP",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1679",
       "label": "Центрозайм",
       "url": "https://bit-do.ru/1679-1000326-D8KivW33tbK?erid=2W5zFHGFvG8",
-      "erid": null,
+      "erid": "2W5zFHGFvG8",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1637",
@@ -507,7 +552,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2163",
@@ -518,7 +564,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1628",
@@ -529,18 +576,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1003",
       "label": "Мега Деньги — МФО Выдача",
       "url": "https://bit-do.ru/1003-1000326-nK9sDrAAcvV?erid=2SDnjbxrnwX",
-      "erid": null,
+      "erid": "2SDnjbxrnwX",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "495",
@@ -551,7 +600,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "486",
@@ -562,18 +612,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2098",
       "label": "Полизайм — Выдача",
       "url": "https://bit-do.ru/2098-1000326-VaZdc9gBBsN5?erid=LjN8KJTYV",
-      "erid": null,
+      "erid": "LjN8KJTYV",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1613",
@@ -584,7 +636,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1627",
@@ -595,7 +648,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1368",
@@ -606,18 +660,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2097",
       "label": "Credelix — Выдача",
       "url": "https://bit-do.ru/2097-1000326-mvApfRv22F96?erid=2W5zFJheh37",
-      "erid": null,
+      "erid": "2W5zFJheh37",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1796",
@@ -628,7 +684,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1646",
@@ -639,18 +696,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2276",
       "label": "Kviku — Выдача",
       "url": "https://bit-do.ru/2276-1000326-K9znI1Emmte4?erid=LjN8KXdNx",
-      "erid": null,
+      "erid": "LjN8KXdNx",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1927",
@@ -661,7 +720,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1630",
@@ -672,7 +732,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "556",
@@ -683,7 +744,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1798",
@@ -694,7 +756,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1648",
@@ -705,7 +768,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1647",
@@ -716,7 +780,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1643",
@@ -727,18 +792,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2450",
       "label": "БамМани — Заём",
       "url": "https://bit-do.ru/2450-1000326-j4n0hX4MMi0r?erid=static",
-      "erid": null,
+      "erid": "static",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "static-value-needs-confirmation"
     },
     {
       "source_offer_code": "2175",
@@ -749,7 +816,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1748",
@@ -760,7 +828,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1463",
@@ -771,18 +840,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "969",
       "label": "Центрофинанс — МФО Выдача",
       "url": "https://bit-do.ru/969-1000326-dQ6UB3EETde?erid=2SDnjdWhfzw",
-      "erid": null,
+      "erid": "2SDnjdWhfzw",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "450",
@@ -793,7 +864,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1625",
@@ -804,7 +876,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1799",
@@ -815,7 +888,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1621",
@@ -826,7 +900,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "426",
@@ -837,7 +912,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2739",
@@ -848,7 +924,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1757",
@@ -859,7 +936,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1717",
@@ -870,29 +948,32 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "938",
       "label": "Fin5 — МФО Выдача",
       "url": "https://bit-do.ru/938-1000326-2O0i1kJJtpd?erid=2SDnjbxiPg4",
-      "erid": null,
+      "erid": "2SDnjbxiPg4",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1856",
       "label": "Ваш кредит — Выдача займа",
       "url": "https://bit-do.ru/1856-1000326-oNBhZAzztK9?erid=2SDnjenqQFv",
-      "erid": null,
+      "erid": "2SDnjenqQFv",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1747",
@@ -903,7 +984,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1744",
@@ -914,7 +996,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "496",
@@ -925,7 +1008,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "468",
@@ -936,7 +1020,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1738",
@@ -947,7 +1032,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1640",
@@ -958,7 +1044,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2633",
@@ -969,18 +1056,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1879",
       "label": "МфоБанк",
       "url": "https://bit-do.ru/1879-1000326-DazUvW33tbK?erid=2SDnjdyNspN",
-      "erid": null,
+      "erid": "2SDnjdyNspN",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1758",
@@ -991,7 +1080,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1702",
@@ -1002,62 +1092,68 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2589",
       "label": "Давака",
       "url": "https://bit-do.ru/2589-1000326-0ZVoi0NPPtAL?erid=2W5zFHw4NrU",
-      "erid": null,
+      "erid": "2W5zFHw4NrU",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2584",
       "label": "Возьмика",
       "url": "https://bit-do.ru/2584-1000326-490EcoJbbtnz?erid=2VtzqusF8mX",
-      "erid": null,
+      "erid": "2VtzqusF8mX",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1677",
       "label": "Выдадим",
       "url": "https://bit-do.ru/1677-1000326-k6kH5MQQTov?erid=2W5zFJmjUUh",
-      "erid": null,
+      "erid": "2W5zFJmjUUh",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1866",
       "label": "ЦДП — Выданный займ",
       "url": "https://bit-do.ru/1866-1000326-Q6QTWaNNT2N?erid=2SDnjefZv1Q",
-      "erid": null,
+      "erid": "2SDnjefZv1Q",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2803",
       "label": "Центрофинанс — Выдача займа (Android)",
       "url": "https://bit-do.ru/2803-1000326-n2MNHDrAAcvV?erid=2SDnjdcoAgJ",
-      "erid": null,
+      "erid": "2SDnjdcoAgJ",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2196",
@@ -1068,7 +1164,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1749",
@@ -1079,7 +1176,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1565",
@@ -1090,7 +1188,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1553",
@@ -1101,40 +1200,44 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1366",
       "label": "Moneyday — МФО Выдача",
       "url": "https://bit-do.ru/1366-1000326-Q30tWaNNT2N?erid=2SDnjeA8Cy9",
-      "erid": null,
+      "erid": "2SDnjeA8Cy9",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2111",
       "label": "МаниБокс — Выдача",
       "url": "https://bit-do.ru/2111-1000326-9XqgHymNNhv9?erid=2W5zFHbzwVB",
-      "erid": null,
+      "erid": "2W5zFHbzwVB",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "2110",
       "label": "Желдорзайм — Выдача",
       "url": "https://bit-do.ru/2110-1000326-VaZkH9gBBsN5?erid=LjN8KD9y3",
-      "erid": null,
+      "erid": "LjN8KD9y3",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": "Проверка исходного исследования: по данным реестра Банка России лицензия отозвана; не показывать в витрине."
+      "block_reason": "Проверка исходного исследования: по данным реестра Банка России лицензия отозвана; не показывать в витрине.",
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1704",
@@ -1145,7 +1248,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1703",
@@ -1156,7 +1260,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2738",
@@ -1167,7 +1272,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1676",
@@ -1178,7 +1284,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2165",
@@ -1189,18 +1296,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2802",
       "label": "снэпкредит",
       "url": "https://bit-do.ru/2802-1000326-55YQSjvPPhw9?erid=2SDnjcRUC4z",
-      "erid": null,
+      "erid": "2SDnjcRUC4z",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1700",
@@ -1211,7 +1320,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "542",
@@ -1222,7 +1332,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "463",
@@ -1233,7 +1344,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "500",
@@ -1244,7 +1356,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "516",
@@ -1255,18 +1368,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1883",
       "label": "7 Займов",
       "url": "https://bit-do.ru/1883-1000326-XD9cj2gghQq?erid=2SDnjcw5pVy",
-      "erid": null,
+      "erid": "2SDnjcw5pVy",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "600",
@@ -1277,7 +1392,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "497",
@@ -1288,7 +1404,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "452",
@@ -1299,7 +1416,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "535",
@@ -1310,7 +1428,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "453",
@@ -1321,18 +1440,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1878",
       "label": "Рябина",
       "url": "https://bit-do.ru/1878-1000326-ypwTOqaah5A?erid=2SDnjdPq3e2",
-      "erid": null,
+      "erid": "2SDnjdPq3e2",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1616",
@@ -1343,7 +1464,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1557",
@@ -1354,7 +1476,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "571",
@@ -1365,18 +1488,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1859",
       "label": "Dayvdolg — заявка",
       "url": "https://bit-do.ru/1859-1000326-YzOu01ootW6?erid=2SDnjebHN6u",
-      "erid": null,
+      "erid": "2SDnjebHN6u",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "provided-in-link"
     },
     {
       "source_offer_code": "1614",
@@ -1387,7 +1512,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "1610",
@@ -1398,18 +1524,20 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     },
     {
       "source_offer_code": "2786",
       "label": "Банки.ру — умная витрина займов",
       "url": "https://bit-do.ru/2786-1000326-Ma4oszKkkhQ0?erid=static",
-      "erid": null,
+      "erid": "static",
       "provided_by_user": true,
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "static-value-needs-confirmation"
     },
     {
       "source_offer_code": "988",
@@ -1420,7 +1548,8 @@
       "received_at": "2026-11-24",
       "review_status": "draft-requires-manual-verification",
       "publication_enabled": false,
-      "block_reason": null
+      "block_reason": null,
+      "erid_status": "not-present-in-user-supplied-link"
     }
   ]
 }
