@@ -52,9 +52,9 @@ function importShowcaseLinks(){
  const file=path.join(ROOT,'research/cpa-offer-links-2026-11-24.json');
  if(!fs.existsSync(file))return 0;
  const data=JSON.parse(fs.readFileSync(file,'utf8'));
- const officialFile=path.join(ROOT,'research/official-offer-enrichment-2026-11-22.json');
- const officialData=fs.existsSync(officialFile)?JSON.parse(fs.readFileSync(officialFile,'utf8')):{records:[]};
- const officialByCode=new Map((officialData.records||[]).map(x=>[String(x.source_offer_code),x]));
+ const identityFile=path.join(ROOT,'research/verified-lender-identities-2026-11-24.json');
+ const identityData=fs.existsSync(identityFile)?JSON.parse(fs.readFileSync(identityFile,'utf8')):{records:[]};
+ const identityByCode=new Map((identityData.records||[]).map(x=>[String(x.source_offer_code),x]));
  const up=db.prepare(`INSERT INTO cpa_showcase_links(source_offer_code,label,cpa_url,erid,source_erid,erid_status,publication_enabled,block_reason,received_at,advertiser_name,advertiser_site) VALUES(?,?,?,?,?,?,0,?,?,?,?) ON CONFLICT(source_offer_code) DO UPDATE SET label=excluded.label,publication_enabled=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.publication_enabled ELSE 0 END,erid_verified=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.erid_verified ELSE 0 END,terms_verified=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.terms_verified ELSE 0 END,advertiser_name=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.advertiser_name ELSE excluded.advertiser_name END,advertiser_site=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.advertiser_site ELSE excluded.advertiser_site END,erid=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.erid ELSE excluded.erid END,source_erid=excluded.source_erid,erid_status=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.source_erid,'')=COALESCE(excluded.source_erid,'') THEN cpa_showcase_links.erid_status ELSE excluded.erid_status END,cpa_url=excluded.cpa_url,block_reason=excluded.block_reason,received_at=excluded.received_at`);
  let count=0;
  for(const r of data.records||[]){
@@ -62,11 +62,11 @@ function importShowcaseLinks(){
   if(!/^\d+$/.test(code)||!label)continue;
   let parsed;try{parsed=new URL(url);}catch{continue;}
   if(parsed.protocol!=='https:'||parsed.hostname!=='bit-do.ru'||!parsed.pathname.startsWith('/'+code+'-'))continue;
-  const official=officialByCode.get(code)||{};
-  const confidence=String(official.confidence||'').toLowerCase();
-  const legalName=official.legal_entity&&confidence.includes('high')?str(official.legal_entity,500):null;
-  let officialSite=null;try{const site=new URL(str(official.official_site,1000));if(site.protocol==='https:')officialSite=site.toString();}catch{}
   const sourceErid=r.erid?str(r.erid,200):null;
+  const identity=identityByCode.get(code)||{};
+  const identityMatches=identity.status==='Действует'&&identity.cpa_erid===sourceErid;
+  const legalName=identityMatches?str(identity.legal_entity,500):null;
+  let officialSite=null;try{const site=new URL(str(identity.official_site,1000));if(identityMatches&&site.protocol==='https:')officialSite=site.toString();}catch{}
   up.run(code,label,url,sourceErid,sourceErid,str(r.erid_status,100)||'not-verified',r.block_reason?str(r.block_reason,500):null,str(r.received_at,40)||now(),legalName,officialSite);
   count++;
  }
