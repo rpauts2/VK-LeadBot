@@ -22,8 +22,11 @@ db.exec([
 'CREATE TABLE IF NOT EXISTS bot_settings(key TEXT PRIMARY KEY,value_json TEXT NOT NULL,updated_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS suppression_list(id INTEGER PRIMARY KEY AUTOINCREMENT,vk_user_id TEXT,phone TEXT,reason TEXT NOT NULL,added_at TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS vk_inbound_events(event_id TEXT PRIMARY KEY,event_type TEXT NOT NULL,vk_user_id TEXT,message_id TEXT,peer_id TEXT,received_at TEXT NOT NULL)',
-'CREATE TABLE IF NOT EXISTS cpa_showcase_links(source_offer_code TEXT PRIMARY KEY,label TEXT NOT NULL,cpa_url TEXT NOT NULL,erid TEXT,erid_status TEXT NOT NULL,publication_enabled INTEGER NOT NULL DEFAULT 0,block_reason TEXT,received_at TEXT NOT NULL)'
+'CREATE TABLE IF NOT EXISTS cpa_showcase_links(source_offer_code TEXT PRIMARY KEY,label TEXT NOT NULL,cpa_url TEXT NOT NULL,erid TEXT,erid_status TEXT NOT NULL,publication_enabled INTEGER NOT NULL DEFAULT 0,block_reason TEXT,received_at TEXT NOT NULL,advertiser_name TEXT,advertiser_site TEXT,erid_verified INTEGER NOT NULL DEFAULT 0,terms_verified INTEGER NOT NULL DEFAULT 0)',
+'CREATE TABLE IF NOT EXISTS vk_dialog_state(vk_user_id TEXT PRIMARY KEY,state TEXT NOT NULL,updated_at TEXT NOT NULL)'
 ].join(';\n') + ';');
+function ensureColumn(table,column,definition){const columns=db.prepare('PRAGMA table_info('+table+')').all();if(!columns.some(x=>x.name===column))db.exec('ALTER TABLE '+table+' ADD COLUMN '+column+' '+definition);}
+ensureColumn('cpa_showcase_links','advertiser_name','TEXT');ensureColumn('cpa_showcase_links','advertiser_site','TEXT');ensureColumn('cpa_showcase_links','erid_verified','INTEGER NOT NULL DEFAULT 0');ensureColumn('cpa_showcase_links','terms_verified','INTEGER NOT NULL DEFAULT 0');
 db.exec('CREATE INDEX IF NOT EXISTS idx_lead_eligibility ON leads(advertising_consent,vk_messages_allowed,unsubscribed,suppressed); CREATE INDEX IF NOT EXISTS idx_campaign_recipient ON campaign_recipients(campaign_id);');
 const now=()=>new Date().toISOString(), sessions=new Map(), attempts=new Map();
 const DEFAULT={bot:{greeting:'Здравствуйте! Поможем ознакомиться с доступными предложениями. Мы не являемся кредитором и не гарантируем одобрение.',explanation:'Номер телефона нужен, чтобы подобрать и передать вам доступные предложения партнёров. Мы не являемся кредитором и не гарантируем одобрение.',phonePrompt:'Укажите номер телефона для обратной связи.',offersIntro:'Ниже представлены предложения. Изучите условия на сайте поставщика.',support:'По вопросам работы сервиса обратитесь в поддержку.'},privacyUrl:'',supportUrl:'',vkGroupUrl:'',integrations:{vkCommunityId:'',vkApiConnected:false,callbackSecretConfigured:false},liveMessagingEnabled:false};
@@ -50,7 +53,7 @@ function importShowcaseLinks(){
  const file=path.join(ROOT,'research/cpa-offer-links-2026-11-24.json');
  if(!fs.existsSync(file))return 0;
  const data=JSON.parse(fs.readFileSync(file,'utf8'));
- const up=db.prepare('INSERT INTO cpa_showcase_links(source_offer_code,label,cpa_url,erid,erid_status,publication_enabled,block_reason,received_at) VALUES(?,?,?,?,?,0,?,?) ON CONFLICT(source_offer_code) DO UPDATE SET label=excluded.label,cpa_url=excluded.cpa_url,erid=excluded.erid,erid_status=excluded.erid_status,publication_enabled=0,block_reason=excluded.block_reason,received_at=excluded.received_at');
+ const up=db.prepare('INSERT INTO cpa_showcase_links(source_offer_code,label,cpa_url,erid,erid_status,publication_enabled,block_reason,received_at) VALUES(?,?,?,?,?,0,?,?) ON CONFLICT(source_offer_code) DO UPDATE SET label=excluded.label,publication_enabled=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.erid,\'\')=COALESCE(excluded.erid,\'\') THEN cpa_showcase_links.publication_enabled ELSE 0 END,erid_verified=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.erid,\'\')=COALESCE(excluded.erid,\'\') THEN cpa_showcase_links.erid_verified ELSE 0 END,terms_verified=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.erid,\'\')=COALESCE(excluded.erid,\'\') THEN cpa_showcase_links.terms_verified ELSE 0 END,advertiser_name=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.erid,\'\')=COALESCE(excluded.erid,\'\') THEN cpa_showcase_links.advertiser_name ELSE NULL END,advertiser_site=CASE WHEN cpa_showcase_links.cpa_url=excluded.cpa_url AND COALESCE(cpa_showcase_links.erid,\'\')=COALESCE(excluded.erid,\'\') THEN cpa_showcase_links.advertiser_site ELSE NULL END,cpa_url=excluded.cpa_url,erid=excluded.erid,erid_status=excluded.erid_status,block_reason=excluded.block_reason,received_at=excluded.received_at');
  let count=0;
  for(const r of data.records||[]){
   const code=str(r.source_offer_code,20),label=str(r.label,200),url=str(r.url,2000);
@@ -70,6 +73,61 @@ function leadView(l){return {id:l.id,vk_user_id:l.vk_user_id,phone:l.phone,sourc
 function withSuppression(){return many('SELECT l.*,CASE WHEN s.id IS NULL THEN 0 ELSE 1 END AS in_suppression FROM leads l LEFT JOIN suppression_list s ON (s.vk_user_id=l.vk_user_id AND l.vk_user_id IS NOT NULL) OR (s.phone=l.phone AND l.phone IS NOT NULL)');}
 function eligibility(){return withSuppression().map(l=>{const x=canSendToLead({...l,suppressed:!!l.suppressed||!!l.in_suppression});return {lead:l,ok:x.ok,reason:x.reason};});}
 function event(id,type,granted,at,source){run('INSERT INTO consent_events(lead_id,consent_type,granted,occurred_at,evidence_source) VALUES(?,?,?,?,?)',id,type,granted?1:0,at,source);}
+function vkBotReady(){return process.env.VK_BOT_REPLIES_ENABLED==='true'&&Boolean(process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN);}
+function showcaseUrl(req){const base=process.env.PUBLIC_BASE_URL||('https://'+String(req.headers['x-forwarded-host']||req.headers.host||'localhost'));try{return new URL('/showcase',base).toString();}catch{return 'https://vk.ru/club243658195';}}
+function botKeyboard(buttons){return JSON.stringify({one_time:false,buttons:buttons.map(b=>[{action:b.link?{type:'open_link',label:b.label,link:b.link}:{type:'text',label:b.label,payload:JSON.stringify(b.payload||{})},color:b.color||'primary'}])});}
+async function sendVkBotMessage(peerId,message,keyboard){
+ const token=process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN;if(!vkBotReady()||!token)throw new Error('VK bot reply is disabled');
+ const params=new URLSearchParams({peer_id:String(peerId),random_id:String(crypto.randomInt(1,2147483647)),message:String(message).slice(0,4000),access_token:token,v:String(process.env.VK_API_VERSION||'5.199'),group_id:String(process.env.VK_COMMUNITY_ID||'243658195'),intent:'default'});
+ if(keyboard)params.set('keyboard',keyboard);
+ const endpoint=process.env.VK_API_BASE_URL||'https://api.vk.com/method/messages.send';
+ const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:params,signal:AbortSignal.timeout(8000)});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok||data.error||data.response==null)throw new Error('VK messages.send failed: '+String(data.error?.error_code||response.status));
+ return data.response;
+}
+function publishedBotOffers(){return many("SELECT source_offer_code,label,cpa_url,erid,advertiser_name,advertiser_site FROM cpa_showcase_links WHERE block_reason IS NULL AND publication_enabled=1 AND erid_verified=1 AND terms_verified=1 AND erid IS NOT NULL AND erid<>'' AND erid<>'static' AND advertiser_name IS NOT NULL AND advertiser_name<>'' AND advertiser_site IS NOT NULL AND advertiser_site<>'' ORDER BY label COLLATE NOCASE LIMIT 4");}
+async function sendOffersToVkUser(vkUserId,req){
+ const offers=publishedBotOffers(),allUrl=showcaseUrl(req);
+ if(!offers.length){
+  await sendVkBotMessage(vkUserId,'Спасибо, номер сохранён. Сейчас партнёрские предложения проходят проверку, поэтому прямые переходы пока недоступны. Предварительный каталог: '+allUrl,botKeyboard([{label:'Все предложения',link:allUrl,color:'primary'},{label:'Получить предложения',payload:{cmd:'get_offers'},color:'secondary'}]));
+  return;
+ }
+ const parts=['Подобрали предложения партнёров. Сравните условия и полную стоимость до оформления.'];
+ for(let i=0;i<offers.length;i++){const o=offers[i];parts.push((i+1)+'. '+o.label+'\nРеклама. Рекламодатель: '+o.advertiser_name+'; сайт рекламодателя: '+o.advertiser_site+'; ERID: '+o.erid+'\n'+o.cpa_url);}
+ const buttons=offers.map((o,i)=>({label:(i+1)+'. '+o.label.slice(0,35),link:o.cpa_url}));buttons.push({label:'Все предложения',link:allUrl,color:'secondary'});
+ await sendVkBotMessage(vkUserId,parts.join('\n\n'),botKeyboard(buttons));
+}
+function phoneFromMessage(message){
+ const text=str(message.text,500),match=text.match(/\+?\s*\d[\d\s().-]{8,}\d/);
+ if(!match)return null;const candidate=match[0].trim().replace(/[\s().-]/g,'');return validPhone(candidate)?candidate:null;
+}
+async function handleVkUserMessage(message,vkUserId,req){
+ const text=str(message.text,1000),normal=text.toLowerCase().replace(/[ё]/g,'е').replace(/[^a-zа-я0-9+]+/g,' ').trim();
+ let payload={};try{payload=typeof message.payload==='string'?JSON.parse(message.payload):(message.payload||{});}catch{}
+ const wantsOffers=payload.cmd==='get_offers'||['получить предложения','получить предложение','подобрать предложения','начать','start'].includes(normal);
+ let state=get('SELECT state FROM vk_dialog_state WHERE vk_user_id=?',vkUserId)?.state||'start';
+ if(wantsOffers){
+  const lead=get('SELECT phone FROM leads WHERE vk_user_id=?',vkUserId);
+  if(lead?.phone){setVkDialogState(vkUserId,'offers_sent');await sendOffersToVkUser(vkUserId,req);return;}
+  setVkDialogState(vkUserId,'waiting_phone');
+  const cfg=settings(),privacy=cfg.privacyUrl?' Подробнее о данных: '+cfg.privacyUrl:'';
+  const explanation='Чтобы показать предложения, отправьте номер телефона сообщением. Он будет использован для обработки вашего запроса и связи с выбранными партнёрами. Мы не кредитор и не гарантируем одобрение.'+privacy;
+  await sendVkBotMessage(vkUserId,explanation+'\n\n'+(cfg.bot.phonePrompt||'Отправьте номер телефона, например +7 900 000-00-00.'),botKeyboard([{label:'Получить предложения',payload:{cmd:'get_offers'},color:'secondary'}]));return;
+ }
+ if(state==='waiting_phone'){
+  const phone=phoneFromMessage(message);
+  if(!phone){await sendVkBotMessage(vkUserId,'Не получилось распознать номер. Отправьте его в формате +7 900 000-00-00.',botKeyboard([{label:'Ввести номер',payload:{cmd:'get_offers'},color:'secondary'}]));return;}
+  const duplicate=get('SELECT vk_user_id FROM leads WHERE phone=? AND vk_user_id<>? LIMIT 1',phone,vkUserId);
+  if(duplicate){await sendVkBotMessage(vkUserId,'Этот номер уже связан с другим обращением. Проверьте номер и отправьте свой актуальный номер телефона.',null);return;}
+  const at=now();run("INSERT INTO leads(vk_user_id,phone,source,created_at,updated_at) VALUES(?,?,?,?,?) ON CONFLICT(vk_user_id) DO UPDATE SET phone=excluded.phone,source=excluded.source,updated_at=excluded.updated_at",vkUserId,phone,'vk-requested-offer',at,at);
+  setVkDialogState(vkUserId,'offers_sent');await sendOffersToVkUser(vkUserId,req);return;
+ }
+ const cfg=settings();
+ await sendVkBotMessage(vkUserId,(cfg.bot.greeting||DEFAULT.bot.greeting)+'\n\nНажмите кнопку ниже, чтобы получить предложения.',botKeyboard([{label:'Получить предложения',payload:{cmd:'get_offers'},color:'primary'}]));
+}
+function setVkDialogState(vkUserId,state){run('INSERT INTO vk_dialog_state(vk_user_id,state,updated_at) VALUES(?,?,?) ON CONFLICT(vk_user_id) DO UPDATE SET state=excluded.state,updated_at=excluded.updated_at',vkUserId,state,now());}
+
 function importLead(v){
  const vk=str(v.vk_user_id,64)||null,phone=str(v.phone,40).replace(/[\s()\-]/g,'')||null;
  if(!vk&&!phone)return {skip:'Нет VK ID или телефона'};if(phone&&!validPhone(phone))return {skip:'Некорректный телефон'};
@@ -89,7 +147,7 @@ function importLead(v){
 }
 async function route(req,res){
  const u=new URL(req.url,'http://'+(req.headers.host||'localhost')),p=u.pathname;
- if(req.method==='GET'&&p==='/api/health')return send(res,200,{ok:true,totalOffers:Number(get('SELECT COUNT(*) n FROM offers').n),offersDraft:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\' AND bot_enabled=0').n),bootImport,liveMessagingEnabled:false,vkCommunityId:String(process.env.VK_COMMUNITY_ID||'243658195'),vkCallbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET),showcaseTotal:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links').n),showcaseImport});
+ if(req.method==='GET'&&p==='/api/health')return send(res,200,{ok:true,botReplyEnabled:vkBotReady(),vkBotTokenConfigured:Boolean(process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN),totalOffers:Number(get('SELECT COUNT(*) n FROM offers').n),offersDraft:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\' AND bot_enabled=0').n),bootImport,liveMessagingEnabled:false,vkCommunityId:String(process.env.VK_COMMUNITY_ID||'243658195'),vkCallbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET),showcaseTotal:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links').n),showcaseImport});
  if(req.method==='POST'&&p==='/api/login'){
   const ip=req.socket.remoteAddress||'unknown',a=attempts.get(ip)||{n:0,until:0};if(a.until>Date.now())return send(res,429,{error:'Слишком много попыток'});
   const d=await readBody(req,20000),password=process.env.ADMIN_PASSWORD||'';
@@ -113,7 +171,8 @@ async function route(req,res){
    const user=Number(m.from_id||o.user_id||0),vkUserId=Number.isSafeInteger(user)&&user>0?String(user):null;
    const messageId=m.id==null?null:String(m.id),peerId=m.peer_id==null?null:String(m.peer_id);
    const eventId=str(d.event_id,200)||crypto.createHash('sha256').update(JSON.stringify(d)).digest('hex');
-   run('INSERT OR IGNORE INTO vk_inbound_events(event_id,event_type,vk_user_id,message_id,peer_id,received_at) VALUES(?,?,?,?,?,?)',eventId,type,vkUserId,messageId,peerId,now());
+   const recorded=run('INSERT OR IGNORE INTO vk_inbound_events(event_id,event_type,vk_user_id,message_id,peer_id,received_at) VALUES(?,?,?,?,?,?)',eventId,type,vkUserId,messageId,peerId,now());
+   if(vkUserId&&type==='message_new'&&recorded.changes===1&&vkBotReady()){try{await handleVkUserMessage(m,vkUserId,req);}catch(error){console.warn('vk_bot_reply_failed',String(error.message||error).slice(0,180));}}
    if(vkUserId&&type==='message_allow')run('UPDATE leads SET vk_messages_allowed=1,vk_permission_at=?,vk_permission_source=?,updated_at=? WHERE vk_user_id=?',now(),'vk_callback:message_allow',now(),vkUserId);
    if(vkUserId&&type==='message_deny')run('UPDATE leads SET vk_messages_allowed=0,vk_permission_at=NULL,vk_permission_source=NULL,updated_at=? WHERE vk_user_id=?',now(),vkUserId);
    if(vkUserId&&type==='user_block'){
@@ -125,17 +184,30 @@ async function route(req,res){
   res.writeHead(200,{'content-type':'text/plain; charset=utf-8','cache-control':'no-store'});res.end('ok');return;
  }
  if(req.method==='GET'&&p==='/api/public/showcase'){
-  const rows=many(`SELECT c.source_offer_code,c.label,c.erid,c.erid_status,o.organization_type FROM cpa_showcase_links c LEFT JOIN offers o ON o.source_offer_code=c.source_offer_code WHERE c.block_reason IS NULL ORDER BY c.label COLLATE NOCASE`);
-  return send(res,200,{offers:rows.map(x=>({code:x.source_offer_code,label:x.label,organizationType:x.organization_type||'не подтверждён',eridStatus:x.erid_status,hasErid:Boolean(x.erid&&x.erid!=='static'),clickEnabled:false,reviewStatus:'draft'})),total:rows.length,excluded:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NOT NULL').n),publicationEnabled:false,warning:'Черновик. Условия, юридические лица рекламодателей и маркировка должны быть проверены до публикации.'});
+  const rows=many(`SELECT c.source_offer_code,c.label,c.erid,c.erid_status,c.cpa_url,c.advertiser_name,c.advertiser_site,c.erid_verified,c.terms_verified,c.publication_enabled,o.organization_type FROM cpa_showcase_links c LEFT JOIN offers o ON o.source_offer_code=c.source_offer_code WHERE c.block_reason IS NULL ORDER BY c.label COLLATE NOCASE`);
+  const offers=rows.map(x=>{const enabled=Boolean(x.publication_enabled&&x.erid_verified&&x.terms_verified&&x.erid&&x.erid!=='static'&&x.advertiser_name&&x.advertiser_site);return {code:x.source_offer_code,label:x.label,organizationType:x.organization_type||'не подтверждён',eridStatus:x.erid_status,hasErid:Boolean(x.erid&&x.erid!=='static'),clickEnabled:enabled,url:enabled?x.cpa_url:null,advertiserName:enabled?x.advertiser_name:null,advertiserSite:enabled?x.advertiser_site:null,erid:enabled?x.erid:null,reviewStatus:enabled?'approved':'draft'};});
+  return send(res,200,{offers,total:rows.length,enabled:offers.filter(x=>x.clickEnabled).length,excluded:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NOT NULL').n),publicationEnabled:offers.some(x=>x.clickEnabled),warning:'Переходы открываются только после ручной проверки рекламодателя, условий и ERID.'});
  }
  if(p.startsWith('/api/')&&!auth(req,res))return;
  if(p.startsWith('/api/')&&req.method!=='GET'&&!originOk(req))return send(res,403,{error:'Недопустимый источник запроса'});
- if(req.method==='GET'&&p==='/api/showcase/summary')return send(res,200,{total:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links').n),readyForReview:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NULL').n),excluded:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NOT NULL').n),withErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid IS NOT NULL AND erid<>'' AND erid<>'static'").n),withoutErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid IS NULL OR erid=''").n),staticErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid='static'").n),publicationEnabled:false});
+ if(req.method==='GET'&&p==='/api/showcase/summary')return send(res,200,{total:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links').n),readyForReview:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NULL').n),excluded:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE block_reason IS NOT NULL').n),withErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid IS NOT NULL AND erid<>'' AND erid<>'static'").n),withoutErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid IS NULL OR erid=''").n),staticErid:Number(get("SELECT COUNT(*) n FROM cpa_showcase_links WHERE erid='static'").n),publicationEnabled:Number(get('SELECT COUNT(*) n FROM cpa_showcase_links WHERE publication_enabled=1 AND erid_verified=1 AND terms_verified=1 AND advertiser_name IS NOT NULL AND advertiser_site IS NOT NULL').n)});
+ if(req.method==='GET'&&p==='/api/showcase/links')return send(res,200,{links:many('SELECT source_offer_code,label,cpa_url,erid,erid_status,block_reason,advertiser_name,advertiser_site,erid_verified,terms_verified,publication_enabled FROM cpa_showcase_links ORDER BY label COLLATE NOCASE')});
+ const showcaseEdit=p.match(/^\/api\/showcase\/links\/(\d+)$/);
+ if(req.method==='PATCH'&&showcaseEdit){
+  const code=showcaseEdit[1],current=get('SELECT * FROM cpa_showcase_links WHERE source_offer_code=?',code);if(!current)return send(res,404,{error:'Предложение не найдено'});
+  const d=await readBody(req),advertiserName=str(d.advertiser_name,300),advertiserSite=str(d.advertiser_site,1000),erid=str(d.erid,200);
+  let siteOk=false;try{const site=new URL(advertiserSite);siteOk=site.protocol==='https:';}catch{}
+  const eridVerified=d.erid_verified===true&&/^[A-Za-z0-9_-]{5,120}$/.test(erid)&&erid!=='static';
+  const termsVerified=d.terms_verified===true;
+  const enabled=Boolean(d.publication_enabled===true&&advertiserName&&siteOk&&eridVerified&&termsVerified&&!current.block_reason);
+  run('UPDATE cpa_showcase_links SET advertiser_name=?,advertiser_site=?,erid=?,erid_verified=?,terms_verified=?,publication_enabled=? WHERE source_offer_code=?',advertiserName||null,siteOk?advertiserSite:null,erid||null,eridVerified?1:0,termsVerified?1:0,enabled?1:0,code);
+  return send(res,200,{ok:true,publicationEnabled:enabled,requires:{advertiserName:true,httpsAdvertiserSite:true,validErid:true,termsConfirmed:true}});
+ }
  if(req.method==='GET'&&p==='/api/dashboard'){const e=eligibility();return send(res,200,{counts:{offers:Number(get('SELECT COUNT(*) n FROM offers').n),draftOffers:Number(get('SELECT COUNT(*) n FROM offers WHERE status=\'draft\'').n),leads:Number(get('SELECT COUNT(*) n FROM leads').n),eligible:e.filter(x=>x.ok).length,campaigns:Number(get('SELECT COUNT(*) n FROM campaigns').n),sources:Number(get('SELECT COUNT(*) n FROM sources').n)},liveMessagingEnabled:false,recentCampaigns:many('SELECT * FROM campaigns ORDER BY id DESC LIMIT 5')});}
  if(req.method==='GET'&&p==='/api/offers'){const q=str(u.searchParams.get('q'),200).toLowerCase();const rows=many('SELECT * FROM offers ORDER BY supplied_label COLLATE NOCASE').filter(x=>!q||[x.supplied_label,x.official_brand,x.source_offer_code,x.organization_type].some(v=>String(v||'').toLowerCase().includes(q)));return send(res,200,{offers:rows.map(offerJson)});}
  const om=p.match(/^\/api\/offers\/([^/]+)$/);
  if(req.method==='PATCH'&&om){const code=decodeURIComponent(om[1]),d=await readBody(req);if(!get('SELECT source_offer_code FROM offers WHERE source_offer_code=?',code))return send(res,404,{error:'Предложение не найдено'});let cpa=d.cpa_url===undefined?undefined:str(d.cpa_url,2000);if(cpa){try{if(new URL(cpa).protocol!=='https:')throw 0;}catch{return send(res,400,{error:'CPA ссылка должна быть корректным HTTPS URL'});}}const erid=d.erid===undefined?undefined:str(d.erid,300),note=d.internal_note===undefined?undefined:str(d.internal_note,3000);run('UPDATE offers SET cpa_url=COALESCE(?,cpa_url),erid=COALESCE(?,erid),internal_note=COALESCE(?,internal_note),status=\'draft\',bot_enabled=0,updated_at=? WHERE source_offer_code=?',cpa===undefined?null:cpa,erid===undefined?null:erid,note===undefined?null:note,now(),code);return send(res,200,{ok:true,offer:offerJson(get('SELECT * FROM offers WHERE source_offer_code=?',code))});}
- if(req.method==='GET'&&p==='/api/vk/events')return send(res,200,{events:many('SELECT event_id,event_type,vk_user_id,message_id,peer_id,received_at FROM vk_inbound_events ORDER BY received_at DESC LIMIT 100'),total:Number(get('SELECT COUNT(*) n FROM vk_inbound_events').n),callbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET),communityId:String(process.env.VK_COMMUNITY_ID||'243658195')});
+ if(req.method==='GET'&&p==='/api/vk/events')return send(res,200,{events:many('SELECT event_id,event_type,vk_user_id,message_id,peer_id,received_at FROM vk_inbound_events ORDER BY received_at DESC LIMIT 100'),total:Number(get('SELECT COUNT(*) n FROM vk_inbound_events').n),callbackConfigured:Boolean(process.env.VK_CALLBACK_CONFIRMATION&&process.env.VK_CALLBACK_SECRET),botReplyEnabled:vkBotReady(),vkBotTokenConfigured:Boolean(process.env.VK_ACCESS_TOKEN||process.env.VK_GROUP_TOKEN),communityId:String(process.env.VK_COMMUNITY_ID||'243658195')});
  if(req.method==='GET'&&p==='/api/leads')return send(res,200,{leads:many('SELECT * FROM leads ORDER BY id DESC LIMIT 1000').map(leadView)});
  if(req.method==='POST'&&p==='/api/leads/import'){const d=await readBody(req);if(!Array.isArray(d.rows)||d.rows.length>5000)return send(res,400,{error:'Ожидается rows до 5000 строк'});const result={imported:0,updated:0,skipped:0,reasons:{}};db.exec('SAVEPOINT audience_import');try{for(const row of d.rows){const x=importLead(row||{});if(x.skip){result.skipped++;result.reasons[x.skip]=(result.reasons[x.skip]||0)+1;}else if(x.updated)result.updated++;else result.imported++;}db.exec('RELEASE audience_import');}catch(e){db.exec('ROLLBACK TO audience_import; RELEASE audience_import');throw e;}return send(res,200,result);}
  const lm=p.match(/^\/api\/leads\/(\d+)\/(unsubscribe|suppress|unsuppress)$/);
@@ -163,5 +235,5 @@ async function route(req,res){
 }
 const server=http.createServer((req,res)=>route(req,res).catch(e=>{console.error('request_error',e);if(!res.headersSent)send(res,e.status||500,{error:e.status?e.message:'Внутренняя ошибка сервера'});else res.destroy();}));
 const port=Number(process.env.PORT||3000);
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))server.listen(port,'0.0.0.0',()=>console.log('VK LeadBot v2 on '+port+'; live messaging disabled'));
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))server.listen(port,'0.0.0.0',()=>console.log('VK LeadBot v2 on '+port+'; campaign sending disabled; bot replies '+(vkBotReady()?'enabled':'disabled')));
 export {server,db};
